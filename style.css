@@ -1,0 +1,106 @@
+/* ------"All" Website in General------ */
+/* The following styles are applied through all the website pages */
+
+* {	font-family: arial, sans-serif;
+	background: #90A9B0;}
+
+footer {border-top: 4px double; clear: both; color: #E3B155}
+
+h1 {color: #E3B155; font-size: 250%; font-family: inherit; font-variant: normal;}
+
+h2 {color: #E3B155; font-size: 200%;}
+
+h3, p {color: white; font-size: 100%;}
+
+dl, ol, ul, li {color: white;}
+
+footer {text-align: center;
+		font-size: 75%;
+		width: 100%;}
+
+.menu {	display: inline;
+		padding: 0.4em 0.5em;
+		color: #E3B155;
+		background: #90A9B0;
+		font-size: 180%;
+		text-align: center;
+		float: right;}
+
+.menu a {color: #E3B155;
+		background: #E3B155;
+		text-decoration: none;}
+
+.menu:hover {border-color: #663399;}
+
+.topimages  {	width: 100%;
+				border: hidden;
+				float: center;
+				border-top: 100%; }
+
+/* ------"About" Website------ */
+/* The following styles are applied through the About website */
+
+form fieldset {	background: white;
+				border: 2px solid white;
+				width: 85%;
+				margin-left: auto;
+				margin-right: auto;}
+
+form p {color: black;}
+
+form * {background: white;}
+
+form legend {	border: 1px solid white;
+				background: #90A9B0;
+				color: white;
+				padding: 0.3em;}
+
+#button {	border: none;
+			background: #90A9B0;
+			text-align: center;}
+
+#myimg {	width: 30%;
+			float: right;
+			border: 2px solid white;}
+
+table * {border: 2px solid white;
+		color: white;
+		text-align: center;
+		padding: 0.2em 0.2em;
+		background: #663399;}
+
+#sectiontable p {	border: none;
+					background: #663399;}
+
+#sectiontable {	margin-right: auto;
+				margin-left: auto;}
+
+dl dl {	display: inline-block;
+		width: 60%;
+		font-size: 115%;
+		border: hidden;}
+
+#themail a {color: white;
+			text-decoration: none;
+			font-size: 100%;
+			text-align: center;
+			align-items: center;}
+#themail {text-align: center;}
+
+#act {text-align: center;}
+
+#deco {float: left}
+
+#solo {text-align: center;}
+
+.cen {text-align: center;}
+
+#rendering {text-align: center;}
+
+#rende1, #rende2 {display: inline-block;
+					margin-left: auto;
+					margin-right: auto;}
+
+#descri {text-align: center;}
+
+
