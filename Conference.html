@@ -98,6 +98,7 @@
     <br/>
 
 </form>
+<div id="userData"></div>
 
 <footer>
     <p>&#169; 2023 All rights reserved | Privacy Policy | Terms and Conditions</p>
@@ -105,7 +106,7 @@
     <script type="module">
     // Import the functions you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 
     // Firebase config
     const firebaseConfig = {
@@ -123,21 +124,32 @@
     const db = getFirestore(app);
 
     // Use an asynchronous function to handle await
-    async function addData() {
-        try {
-        const docRef = await addDoc(collection(db, "users"), {
-            first: "Ada",
-            last: "Lovelace",
-            born: 1815
-        });
-        console.log("Document written with ID: ", docRef.id);
-        } catch (e) {
-        console.error("Error adding document: ", e);
-        }
+  async function addData() {
+    try {
+      const docRef = await addDoc(collection(db, "users"), {
+        first: "Ada",
+        last: "Lovelace",
+        born: 1815
+      });
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
     }
-    
-    // Call the function to add data
-    addData();
+  }
+  
+  async function fetchData() {
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      const userDataDiv = document.getElementById("userData");
+      userDataDiv.innerHTML += `<p>${data.first} ${data.last}, Born in ${data.born}</p>`;
+    });
+  }
+
+  // Add data and then fetch it
+  addData().then(() => {
+    fetchData();
+  });
     </script>
 </body>
 </html>
