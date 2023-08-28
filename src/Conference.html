@@ -107,6 +107,7 @@
         <th>Date</th>
         <th>Time</th>
         <th>Wi-Fi</th>
+        <th>category</th>
       </tr>
     </thead>
     <tbody id="eventTableBody">
@@ -165,6 +166,10 @@ async function fetchData() {
     const wifiCell = document.createElement("td");
     wifiCell.textContent = event.wifi;
     row.appendChild(wifiCell);
+
+    const categoryCell = document.createElement("td"); 
+    categoryCell.textContent = event.category; 
+    row.appendChild(categoryCell); 
 
     tableBody.appendChild(row);
   });
