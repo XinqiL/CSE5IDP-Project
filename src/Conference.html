@@ -140,6 +140,21 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// General function to add data to Firestore
+async function addDataToFirestore(collectionName, data) {
+  try {
+    await addDoc(collection(db, collectionName), data);
+    console.log("Data successfully added!");
+  } catch (e) {
+    console.error("Error adding data: ", e);
+  }
+}
+
+// Usage example:
+// const inputData = { key1: "value1", key2: "value2" };
+// addDataToFirestore("yourCollectionName", inputData);
+
+// fetch data from Firestore
 async function fetchData() {
   const querySnapshot = await getDocs(collection(db, "events"));
   const tableBody = document.getElementById("eventTableBody");
