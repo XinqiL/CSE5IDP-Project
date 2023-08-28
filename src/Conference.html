@@ -98,7 +98,22 @@
     <br/>
 
 </form>
-<div id="eventData"></div>
+
+<div id="eventData">
+  <table id="eventTable">
+    <thead>
+      <tr>
+        <th>Organiser Name</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Wi-Fi</th>
+      </tr>
+    </thead>
+    <tbody id="eventTableBody">
+      <!-- Rows will be added here by JavaScript -->
+    </tbody>
+  </table>
+</div>
 
 <footer>
     <p>&#169; 2023 All rights reserved | Privacy Policy | Terms and Conditions</p>
@@ -125,14 +140,34 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function fetchData() {
-    const querySnapshot = await getDocs(collection(db, "events"));
-    querySnapshot.forEach((doc) => {
-      const event = doc.data();
-      const eventDataDiv = document.getElementById("eventData");
-      const jsDate = event.time.toDate();
-      const formattedDate = jsDate.toLocaleString();
-      eventDataDiv.innerHTML += `<p>${event.organiserName} ${formattedDate} ${event.wifi}</p>`;
-    });
+  const querySnapshot = await getDocs(collection(db, "events"));
+  const tableBody = document.getElementById("eventTableBody");
+  
+  querySnapshot.forEach((doc) => {
+    const event = doc.data();
+    const row = document.createElement("tr");
+
+    const organiserCell = document.createElement("td");
+    organiserCell.textContent = event.organiserName;
+    row.appendChild(organiserCell);
+
+    const jsDate = event.time.toDate();
+    const dateCell = document.createElement("td");
+    const formattedDate = jsDate.toLocaleDateString();
+    dateCell.textContent = formattedDate;
+    row.appendChild(dateCell);
+
+    const timeCell = document.createElement("td");
+    const formattedTime = jsDate.toLocaleTimeString();
+    timeCell.textContent = formattedTime;
+    row.appendChild(timeCell);
+
+    const wifiCell = document.createElement("td");
+    wifiCell.textContent = event.wifi;
+    row.appendChild(wifiCell);
+
+    tableBody.appendChild(row);
+  });
 }
 
 // Fetch the data
