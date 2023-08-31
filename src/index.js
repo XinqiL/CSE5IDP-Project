@@ -1,4 +1,4 @@
-import { fetchData } from "./firestore.js";
+import { fetchData, signUp } from "./firestore.js";
 
 async function render(event) {
   const tableBody = document.getElementById("eventTableBody");
@@ -39,3 +39,18 @@ async function fetchDataAndRender() {
 
 // Fetch the data and render
 fetchDataAndRender();
+
+// Get form elements
+const signupForm = document.getElementById("signup-form");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+
+// Listen for form submit
+signupForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  // Get user info
+  const userEmail = email.value;
+  const userPassword = password.value;
+  signUp(userEmail, userPassword);
+});

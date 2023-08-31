@@ -6,6 +6,10 @@ import {
   addDoc,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -21,6 +25,7 @@ const firebaseConfig = {
 // Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth();
 
 // General function to add data to Firestore
 export async function addDataToFirestore(collectionName, data) {
@@ -44,4 +49,16 @@ export async function fetchData() {
     dataArr.push(doc.data());
   });
   return dataArr;
+}
+
+export async function signUp(email, password) {
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // User created
+      console.log("User created:", userCredential.user);
+    })
+    .catch((error) => {
+      // Error occurred
+      console.error("Error:", error);
+    });
 }
