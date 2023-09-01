@@ -62,3 +62,25 @@ export async function signUp(email, password) {
       console.error("Error:", error);
     });
 }
+
+// myFirebaseService.js
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    // User is signed in.
+    console.log("User is signed in:", user);
+  } else {
+    // User is signed out.
+    console.log("User is signed out");
+  }
+});
+
+// auth
+//   .signOut()
+//   .then(() => {
+//     // Sign-out successful.
+//     console.log("User signed out.");
+//   })
+//   .catch((error) => {
+//     // An error happened.
+//     console.log("Error signing out:", error);
+//   });
