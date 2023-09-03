@@ -1,1 +1,1 @@
-import { addEvent } from "./firestore.js";
+import { addEvent } from "./backend/firestore.js";
