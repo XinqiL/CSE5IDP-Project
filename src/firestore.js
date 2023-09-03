@@ -4,12 +4,7 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -25,62 +20,25 @@ const firebaseConfig = {
 // Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth();
 
-// General function to add data to Firestore
-export async function addDataToFirestore(collectionName, data) {
+// function to add an event to Firestore database
+export async function addEvent(event) {
   try {
-    await addDoc(collection(db, collectionName), data);
-    console.log("Data successfully added!");
-  } catch (e) {
-    console.error("Error adding data: ", e);
+    const eventData = {
+      ...(event.theme && { theme: event.theme }),
+      ...(event.category && { category: event.category }),
+      ...(event.location && { location: event.location }),
+      ...(event.time && { time: event.time }),
+      ...(event.organiserName && { organiserName: event.organiserName }),
+      ...(event.organiserContact && {
+        organiserContact: event.organiserContact,
+      }),
+      ...(event.wifi && { wifi: event.wifi }),
+    };
+
+    await addDoc(collection(db, "events"), eventData);
+    console.log("Document successfully written!");
+  } catch (error) {
+    console.error("Error adding document: ", error);
   }
 }
-
-// Usage example:
-// const inputData = { key1: "value1", key2: "value2" };
-// addDataToFirestore("yourCollectionName", inputData);
-
-// fetch data from Firestore
-export async function fetchData() {
-  const dataArr = [];
-  const querySnapshot = await getDocs(collection(db, "events"));
-  querySnapshot.forEach((doc) => {
-    dataArr.push(doc.data());
-  });
-  return dataArr;
-}
-
-export async function signUp(email, password) {
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // User created
-      console.log("User created:", userCredential.user);
-    })
-    .catch((error) => {
-      // Error occurred
-      console.error("Error:", error);
-    });
-}
-
-// myFirebaseService.js
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    // User is signed in.
-    console.log("User is signed in:", user);
-  } else {
-    // User is signed out.
-    console.log("User is signed out");
-  }
-});
-
-// auth
-//   .signOut()
-//   .then(() => {
-//     // Sign-out successful.
-//     console.log("User signed out.");
-//   })
-//   .catch((error) => {
-//     // An error happened.
-//     console.log("Error signing out:", error);
-//   });
