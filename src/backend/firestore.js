@@ -22,17 +22,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 // function to add an event to Firestore database
-export async function addEvent(event) {
+export async function addEventToFirestore(event) {
   try {
     const eventData = {
-      ...(event.theme && { theme: event.theme }),
-      ...(event.category && { category: event.category }),
-      ...(event.location && { location: event.location }),
       ...(event.time && { time: event.time }),
       ...(event.organiserName && { organiserName: event.organiserName }),
-      ...(event.organiserContact && {
-        organiserContact: event.organiserContact,
-      }),
       ...(event.wifi && { wifi: event.wifi }),
     };
 
