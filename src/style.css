@@ -55,9 +55,9 @@ form legend {	border: 1px solid white;
 				color: white;
 				padding: 0.3em;}
 
-#button {	border: none;
+/*#button {	border: none;
 			background: #90A9B0;
-			text-align: center;}
+			text-align: center;} */
 
 #myimg {	width: 30%;
 			float: right;
@@ -103,4 +103,6 @@ dl dl {	display: inline-block;
 
 #descri {text-align: center;}
 
-
+#buttononhover:hover {
+	background-color: #009900; }
+           
