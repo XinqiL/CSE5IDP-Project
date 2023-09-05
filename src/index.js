@@ -1,5 +1,5 @@
 // import addEventToFirestore function from backend js file
-import { addEventToFirestore } from "./backend/firestore.js";
+import { addEventToFirestore, registerUser } from "./backend/firestore.js";
 
 document.addEventListener("DOMContentLoaded", function () {
   // Get the form element
