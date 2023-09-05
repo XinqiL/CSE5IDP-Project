@@ -1,6 +1,7 @@
 // Import the functions you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
+import { addEventToFirestore } from "./backend/firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -30,6 +31,21 @@ async function addDataToFirestore(collectionName, data) {
 // Usage example:
 // const inputData = { key1: "value1", key2: "value2" };
 // addDataToFirestore("yourCollectionName", inputData);
+document.addEventListener("DOMContentLoaded, function () {
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", async function (event)  {
+    event.preventDefault();
+
+    const formData = {
+      email = form.email.value,
+      username = form.username.value,
+      password = form.password.value,
+      passwordConfirm = form.passwordConf.value,
+    };
+    await registerUser(formData);
+  });
+}); 
 
 // fetch data from Firestore
 async function fetchData() {
