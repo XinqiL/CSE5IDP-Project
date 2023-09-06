@@ -1,21 +1,22 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-analytics.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-auth.js";
+import { registerUser } from "./src/backend/firestore.js";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyC2560pETTPekmI-ABPf_xZ3M3UB6ZqMK4",
-    authDomain: "message-display-system.firebaseapp.com",
-    databaseURL: "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "message-display-system",
-    storageBucket: "message-display-system.appspot.com",
-    messagingSenderId: "260068152843",
-    appId: "1:260068152843:web:2336283608fddc0e41d90e",
-    measurementId: "G-HCK0JW6RYC"
-  };
+  apiKey: "AIzaSyC2560pETTPekmI-ABPf_xZ3M3UB6ZqMK4",
+  authDomain: "message-display-system.firebaseapp.com",
+  databaseURL: "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "message-display-system",
+  storageBucket: "message-display-system.appspot.com",
+  messagingSenderId: "260068152843",
+  appId: "1:260068152843:web:2336283608fddc0e41d90e",
+  measurementId: "G-HCK0JW6RYC"
+};
 
 
-  const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
@@ -34,44 +35,43 @@ const createacctbtn = document.getElementById("create-acct-btn");
 
 const returnBtn = document.getElementById("return-btn");
 
-var email, password, signupEmail, signupPassword, confirmSignupEmail, confirmSignUpPassword;
+var email,
+  password,
+  signupEmail,
+  signupPassword,
+  confirmSignupEmail,
+  confirmSignUpPassword,
+  preference;
 
 createacctbtn.addEventListener("click", function() {
   var isVerified = true;
 
-   signupEmail = signupEmailIn.value;
-   confirmSignupEmail = confirmSignupEmailIn.value;
+  signupEmail = signupEmailIn.value;
+  confirmSignupEmail = confirmSignupEmailIn.value;
    if(signupEmail != confirmSignupEmail) {
       window.alert("Email fields do not match. Try again.")
-      isVerified = false;
+    isVerified = false;
   }
 
-   signupPassword = signupPasswordIn.value;
-   confirmSignUpPassword = confirmSignUpPasswordIn.value;
+  signupPassword = signupPasswordIn.value;
+  confirmSignUpPassword = confirmSignUpPasswordIn.value;
    if(signupPassword != confirmSignUpPassword) {
       window.alert("Password fields do not match. Try again.")
-      isVerified = false;
+    isVerified = false;
   }
-  
+
   if(signupEmail == null || confirmSignupEmail == null || signupPassword == null || confirmSignUpPassword == null) {
     window.alert("Please fill out all required fields.");
     isVerified = false;
   }
-  
+
   if(isVerified) {
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
-      .then((userCredential) => {
-      // Signed in 
-      const user = userCredential.user;
-      // ...
-      window.alert("Success! Account created.");
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      // ..
-      window.alert("Error occurred. Try again.");
-    });
+    const newUser = {
+      email: signupEmail,
+      password: signupPassword,
+      preference: preference,
+    };
+    registerUser(newUser);
   }
 });
 
@@ -98,11 +98,11 @@ submitButton.addEventListener("click", function() {
 });
 
 signupButton.addEventListener("click", function() {
-    main.style.display = "none";
-    createacct.style.display = "block";
+  main.style.display = "none";
+  createacct.style.display = "block";
 });
 
 returnBtn.addEventListener("click", function() {
-    main.style.display = "block";
-    createacct.style.display = "none";
+  main.style.display = "block";
+  createacct.style.display = "none";
 });
