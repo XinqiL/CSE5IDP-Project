@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+import { addEventToFirestore } from "./backend/firestore.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -23,16 +24,24 @@ document.getElementById("eventDetails").addEventListener("submit", submitForm);
 function submitForm(e) {
   e.preventDefault();
 
-  var eventName = getElementById("cename");
-  var organiserName = getElementById("ceorganiser");
-  var eventCategory = getElementById("cecategory");
-  var eventLocation = getElementById("celocation");
-  var eventDate = getElementById("cedate");
-  var time = getElementById("cetime");
-  var wifi = getElementById("cewifi");
+  var eventName = document.getElementById("cename");
+  var organiserName = document.getElementById("ceorganiser");
+  var eventCategory = document.getElementById("cecategory");
+  var eventLocation = document.getElementById("celocation");
+  var eventDate = document.getElementById("cedate");
+  var time = document.getElementById("cetime");
+  var wifi = document.getElementById("cewifi");
 
-  saveData(eventName, organiserName, eventCategory, eventLocation, eventDate, time, wifi);
-
+  const saveData = {
+    eventName: eventName, 
+    organiserName: organiserName, 
+    eventCategory: eventCategory, 
+    eventLocation: eventLocation, 
+    eventDate: eventDate, 
+    time: time, 
+    wifi: wifi
+    };
+addEventToFirestore(saveData);
 }
 
 const saveData = (eventName, organiserName, eventCategory, eventLocation, eventDate, time, wifi) => {
