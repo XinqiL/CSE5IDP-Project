@@ -30,12 +30,16 @@ const auth = getAuth();
 export async function addEventToFirestore(event) {
   try {
     const eventData = {
-      ...(event.time && { time: event.time }),
+      ...(event.eventName && { eventName: event.eventName }),
+      ...(event.eventCategory && { eventCategory: event.eventCategory }),
+      ...(event.eventLocation && { eventLocation: event.eventLocation }),
+      ...(event.eventDate && { eventDate: event.eventDate }),
       ...(event.organiserName && { organiserName: event.organiserName }),
+      ...(event.time && {time: event.time }),
       ...(event.wifi && { wifi: event.wifi }),
     };
 
-    await addDoc(collection(db, "events"), eventData);
+    await addDoc(collection(db, "eventsCreated"), eventData);
     console.log("New event successfully added!");
   } catch (error) {
     console.error("Error adding new event: ", error);

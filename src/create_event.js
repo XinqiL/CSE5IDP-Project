@@ -1,54 +1,26 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
-
-// Firebase config
-const firebaseConfig = {
-    apiKey: "AIzaSyC2560pETTPekmI-ABPf_xZ3M3UB6ZqMK4",
-    authDomain: "message-display-system.firebaseapp.com",
-    databaseURL: "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "message-display-system",
-    storageBucket: "message-display-system.appspot.com",
-    messagingSenderId: "260068152843",
-    appId: "1:260068152843:web:2336283608fddc0e41d90e",
-    measurementId: "G-HCK0JW6RYC"
-  };
-
-// Initialise Firebase and Firestore
-const app = initializeApp(firebaseConfig);
-
-// reference your database
-var eventDetailsDB = firebase.database().ref("eventDetails");
+import { addEventToFirestore } from "./backend/firestore.js";
 
 document.getElementById("eventDetails").addEventListener("submit", submitForm);
 
 function submitForm(e) {
   e.preventDefault();
+  var eventName = document.getElementById("cename").value;
+  var organiserName = document.getElementById("ceorganiser").value;
+  var eventCategory = document.getElementById("cecategory").value;
+  var eventLocation = document.getElementById("celocation").value;
+  var eventDate = document.getElementById("cedate").value;
+  var time = document.getElementById("cetime").value;
+  var wifi = document.getElementById("cewifi").value;
 
-  var eventName = getElementById("cename");
-  var organiserName = getElementById("ceorganiser");
-  var eventCategory = getElementById("cecategory");
-  var eventLocation = getElementById("celocation");
-  var eventDate = getElementById("cedate");
-  var time = getElementById("cetime");
-  var wifi = getElementById("cewifi");
+  const saveData = {
+    eventName: eventName,
+    organiserName: organiserName,
+    eventCategory: eventCategory,
+    eventLocation: eventLocation,
+    eventDate: eventDate,
+    time: time,
+    wifi: wifi,
+  };
 
-  saveData(eventName, organiserName, eventCategory, eventLocation, eventDate, time, wifi);
-
+  addEventToFirestore(saveData); // call the backend function
 }
-
-const saveData = (eventName, organiserName, eventCategory, eventLocation, eventDate, time, wifi) => {
-  var neweventDetails = eventDetailsDB.push();
-
-  neweventDetails.set({
-    eventName: cename,
-    organiserName: ceorganiser,
-    eventCategory: cecategory,
-    eventLocation: celocation,
-    eventDate: cedate,
-    time: cetime,
-    wifi: cewifi,
-  });
-};
-
-const getElementVal = (id) => {
-  return document.getElementById(id).value;
-};
