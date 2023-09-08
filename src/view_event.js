@@ -33,7 +33,7 @@ async function addDataToFirestore(collectionName, data) {
 
 // fetch data from Firestore
 async function fetchData() {
-  const querySnapshot = await getDocs(collection(db, "events"));
+  const querySnapshot = await getDocs(collection(db, "eventsCreated"));
   const tableBody = document.getElementById("eventTableBody");
   
   querySnapshot.forEach((doc) => {
