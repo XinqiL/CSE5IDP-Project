@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Conference | Booking" />
+    <meta name="keywords" content="conferences, meetings, bookings" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MeetBook | Search Event</title>
+    <!-- References to external CSS files -->
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <nav id="sidebar">
+      <button id="createEventButton">Create Event</button>
+      <button id="viewEventButton">Events List</button>
+      <a href="https://">Log Out</a>
+    </nav>
+    <div id="body">
+      <h2 id="solo">View Events List</h2>
+      <div id="eventData">
+        <table id="eventTable">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Organiser</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>WiFi</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="eventTableBody">
+            <!-- Rows will be added here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <footer>
+        <p>
+          &#169; 2023 All rights reserved | Privacy Policy | Terms and
+          Conditions
+        </p>
+      </footer>
+    </div>
+    <script type="module">
+      import { fetchDataFromFirestore } from "./backend/firestore.js";
+
+      document
+        .getElementById("createEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./create_event.html";
+        });
+
+      document
+        .getElementById("viewEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./view_eventlist.html";
+        });
+
+      fetchDataFromFirestore();
+    </script>
+  </body>
+</html>

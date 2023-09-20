@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Conference | Booking" />
+    <meta name="keywords" content="conferences, meetings, bookings" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MeetBook | Search Event</title>
+    <!-- References to external CSS files -->
+    <link rel="stylesheet" href="styles/style.css" />
+  </head>
+  <body>
+    <p id="eventName"></p>
+    <p id="organiserName"></p>
+    <p id="eventCategory"></p>
+    <p id="eventLocation"></p>
+    <p id="eventDate"></p>
+    <p id="time"></p>
+    <p id="wifi"></p>
+  </body>
+  <script type="module">
+    import { fetchAnEventData } from "./backend/firestore.js";
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+    const uid = getQueryParam("uid");
+
+    fetchAnEventData(uid);
+  </script>
+</html>
