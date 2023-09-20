@@ -3,7 +3,11 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebas
 import {
   getFirestore,
   collection,
+  doc,
+  getDoc,
   addDoc,
+  getDocs,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 import {
   getAuth,
@@ -35,12 +39,14 @@ export async function addEventToFirestore(event) {
       ...(event.eventLocation && { eventLocation: event.eventLocation }),
       ...(event.eventDate && { eventDate: event.eventDate }),
       ...(event.organiserName && { organiserName: event.organiserName }),
-      ...(event.time && {time: event.time }),
+      ...(event.time && { time: event.time }),
       ...(event.wifi && { wifi: event.wifi }),
+      createdAt: new Date().toISOString(),
     };
 
-    await addDoc(collection(db, "eventsCreated"), eventData);
-    console.log("New event successfully added!");
+    const docRef = await addDoc(collection(db, "eventsCreated"), eventData);
+    console.log("New event successfully added with ID: ", docRef.id);
+    return docRef.id;
   } catch (error) {
     console.error("Error adding new event: ", error);
   }
@@ -80,5 +86,116 @@ export async function registerUser(user) {
     );
   } catch (error) {
     console.error("An error occurred while registering a new user: ", error);
+  }
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const ampm = hours >= 12 ? "pm" : "am";
+
+  const formattedDate = `${day}/${month}/${year}`;
+  const formattedTime = `${hours % 12 || 12}:${minutes} ${ampm}`;
+
+  return { formattedDate, formattedTime };
+}
+
+// fetch data from Firestore
+export async function fetchDataFromFirestore() {
+  const querySnapshot = await getDocs(
+    collection(db, "eventsCreated"),
+    orderBy("createdAt")
+  );
+  const tableBody = document.getElementById("eventTableBody");
+
+  querySnapshot.forEach((doc) => {
+    const event = doc.data();
+    const row = document.createElement("tr");
+
+    const eventCell = document.createElement("td");
+    eventCell.textContent = event.eventName;
+    row.appendChild(eventCell);
+
+    const organiserCell = document.createElement("td");
+    organiserCell.textContent = event.organiserName;
+    row.appendChild(organiserCell);
+
+    const categoryCell = document.createElement("td");
+    categoryCell.textContent = event.eventCategory;
+    row.appendChild(categoryCell);
+
+    const locationCell = document.createElement("td");
+    locationCell.textContent = event.eventLocation;
+    row.appendChild(locationCell);
+
+    const { formattedDate, formattedTime } = formatDate(event.eventDate);
+    const dateCell = document.createElement("td");
+    dateCell.textContent = formattedDate;
+    row.appendChild(dateCell);
+
+    const timeCell = document.createElement("td");
+    timeCell.textContent = formattedTime;
+    row.appendChild(timeCell);
+
+    const wifiCell = document.createElement("td");
+    wifiCell.textContent = event.wifi;
+    row.appendChild(wifiCell);
+
+    // Create buttons
+    const editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", function () {
+      // Add your edit logic here
+    });
+
+    const displayButton = document.createElement("button");
+    displayButton.textContent = "Display";
+    displayButton.addEventListener("click", function () {
+      // Add your display logic here
+      const uid = doc.id;
+      window.location.href = `display_event.html?uid=${uid}`;
+    });
+
+    // Create cells for buttons and append buttons
+    const editCell = document.createElement("td");
+    editCell.appendChild(editButton);
+    row.appendChild(editCell);
+
+    const displayCell = document.createElement("td");
+    displayCell.appendChild(displayButton);
+    row.appendChild(displayCell);
+
+    tableBody.appendChild(row);
+  });
+}
+
+export async function fetchAnEventData(uid) {
+  const docRef = doc(db, "eventsCreated", uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const eventData = docSnap.data();
+    // 现在你可以使用 eventData 对象来填充你的 HTML 页面
+    // 例如：
+    document.getElementById("eventName").textContent = eventData.eventName;
+    document.getElementById("organiserName").textContent =
+      eventData.organiserName;
+    document.getElementById("eventCategory").textContent =
+      eventData.eventCategory;
+    document.getElementById("eventLocation").textContent =
+      eventData.eventLocation;
+
+    const { formattedDate, formattedTime } = formatDate(eventData.eventDate);
+
+    document.getElementById("eventDate").textContent = formattedDate;
+    document.getElementById("time").textContent = formattedTime;
+
+    document.getElementById("wifi").textContent = `WiFi: ${eventData.wifi}`;
+  } else {
+    console.log("No such document!");
   }
 }
