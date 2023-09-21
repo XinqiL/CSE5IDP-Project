@@ -1,30 +1,210 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Sign In</title>
-  <link rel = "stylesheet" href = "s1.css">
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sign up</title>
+
+    <!--- Bootstrap link for overall CSS-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    
+
+    <!---------------- JS FOR PASSWORD ENCRYPTION----------------------------->
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+   
+   
+   
+    <!------------------------ Here is Css style( we can use an external one, not a problem )-->
+   
+   <style>
+        body{
+            background-color: #90a9b0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            margin: 0px;
+
+
+
+
+        }
+    </style>
+    <!-------------- end of CSS------------------------------------>
 </head>
 <body>
-  <div class = "login-container">
-    <div id= "main">
-      <h1>Sign In</h1>
-      <input id = "email" type = "text" placeholder = "Email"></input>
-      <input id = "password" type = "password" placeholder = "Password"></input>
-      <button id = "submit">Sign In</button>
-      <p><span>Or join us   </span></p>
-      <button id = "sign-up">Sign Up</button>
-    </div>
+         
+    <!----------------------------- Sign up form ----------------->
+        <div class="mb-3">
+        <h3 class="mb-3">Sign Up as User</h3>
+        <input type="text" placeholder="Fullname" id ="nameInput" class="form-control mb-2">
+        <input type="text" placeholder="Email" id ="emailInput" class="form-control mb-2">
+        <input type="text" placeholder="Username" id ="userInput" class="form-control mb-2">
+        
+        <input type="password" placeholder="Enter Password" id ="passInput" class="form-control mb-2" 
+>
+       
 
-    <div id = "create-acct">
-      <h1>Create an Account</h1>
-      <input id = "email-signup" type = "text" placeholder = "Email"></input>
-      <input id = "confirm-email-signup" type = "email" placeholder = "Confirm Email"></input>
-      <input id = "password-signup" type = "password" placeholder = "Password"></input>
-      <input id = "confirm-password-signup" type = "password" placeholder = "Confirm Password "></input>
-      <button id = "create-acct-btn">Create Account</button>
-      <button id = "return-btn">Return to Login</button>
-    </div>
-  </div>
-  <script type = "module" src = "s1.js"></script>
+        <input type = "password" id = "cpassInput"  placeholder = "Confirm Password " class="form-control mb-2">
+        <input type="checkbox" onclick="myFunction()">Show Password
+       
+        <button type ="submit"  id="sub_btn" class="btn w-100 btn-primary mb-2">Sign Up</button>
+
+        
+        <a href="login.html" class="badge badge-secondary py-1 w-100">have account?</a>
+        <a href="home.html" class="badge badge-secondary py-1 w-100">Home</a>
+        <a href="events.html" class="badge badge-secondary py-1 w-100">Add An Event</a>
+        <a href="confrenceR.html" class="badge badge-secondary py-1 w-100"> Sign Up as Event Organiser</a>
+
+        </div>
+
+
+    <!---------------- js for showing the password ------------------->    
+     <script>   
+     function myFunction() {
+            var x = document.getElementById("passInput");
+            var y = document.getElementById("cpassInput");
+            if (x.type === "password" , y.type==="password" )  {
+               x.type = "text";
+               y.type = "text";
+            }  else {
+               x.type = "password";
+               y.type = "password";
+         }
+    }
+    </script>
+  
+
+
+    <!---------------------js for firbase------------------->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+        import { getDatabase, ref, set, child, get}  from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+        
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+         apiKey: "AIzaSyCt0yXXOD9uHvMD-CvmKTUEUYiB1FIhmjk",
+         authDomain: "iwan-15fbc.firebaseapp.com",
+         databaseURL: "https://iwan-15fbc-default-rtdb.firebaseio.com",
+         projectId: "iwan-15fbc",
+         storageBucket: "iwan-15fbc.appspot.com",
+         messagingSenderId: "750233763697",
+         appId: "1:750233763697:web:7c1f869a66d993516440d0",
+         measurementId: "G-06QRYB54WN"
+};
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+       
+        const database = getDatabase(app);
+
+
+    //---------------- js getting inputs --------------//
+        const fullname =document.getElementById("nameInput");
+        const email =document.getElementById("emailInput");
+        const username =document.getElementById("userInput");
+        const pass  =document.getElementById("passInput");
+        
+        const submit =document.getElementById("sub_btn");
+     
+
+      
+
+    //----------------Validate the input-----------------//
+        
+        function Validation(){
+          var fullnameregex= /^[a-zA-Z\s]+$/;
+          var emailregex= /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
+          var userregex= /^[a-zA-Z0-9]+$/;
+         
+          
+          if(!fullnameregex.test(fullname.value)){
+            alert("please enter a valid name");
+            return false ;
+         }
+          if(!emailregex.test(email.value)){
+            alert("please enter a valid email");
+            return false ;
+        }
+          if(!userregex.test(username.value)){
+            alert("please enter a valid username");
+            return false ;
+        }
+     
+          return true;
+
+       
+}
+
+      
+
+   
+    
+      
+    //--------------- Registersusers----------------//
+    
+        function RegisterUsers(){
+          if(!Validation()){
+            return;
+         };
+          const dbRef= ref(database);
+
+          get(child(dbRef, "UsersList/"+ username.value)).then((snapshot)=>{
+            if(snapshot.exists()){
+                alert("username already exists");
+            
+            }
+            else {
+                 set(ref(database, "UsersList/"+ username.value),
+                 {
+                    fullname: fullname.value,
+                    email: email.value,
+                    username: username.value,
+                    password: encPass()
+                   
+
+                 })
+                 .then(() =>{
+                    alert("user added successfully");
+                    
+                 })
+                 .catch((error) =>{
+                    alert("error"+ error);
+                })
+            }
+        });
+
+
+    }
+  
+
+
+
+
+
+  //------------------ Password ecryption -------------------------------------//
+
+
+    function encPass(){
+         var pass12= CryptoJS.AES.encrypt(pass.value, pass.value);
+         return pass12.toString();
+    }
+    //------------Add users to firebase -----------------//
+          submit.addEventListener('click', RegisterUsers);
+
+
+
+
+ </script>
+
+
+
+
+
 </body>
 </html>
