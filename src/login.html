@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Sign in</title>
+
+    <!--- Bootstrap link for overall CSS-->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <!---------------- JS FOR PASSWORD ENCRYPTION----------------------------->
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+    <!------------------------ Here is Css style( we can use an external one, not a problem )-->
+    <style>
+      body {
+        background-color: #90a9b0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        margin: 0px;
+      }
+    </style>
+    <!-------------- end of CSS------------------------------------>
+  </head>
+  <body>
+    <!----------------------------- Sign in form ----------------->
+    <div class="mb-3">
+      <h3 class="mb-2">Sign In</h3>
+
+      <input
+        type="text"
+        placeholder="username"
+        id="userInput"
+        class="form-control mb-2"
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        id="passInput"
+        class="form-control mb-2"
+      />
+      <input type="checkbox" onclick="myFunction()" />Show Password
+
+      <div class="custom-control custom-switch">
+        <input
+          type="checkbox"
+          class="custom-control-input"
+          id="customSwitch1"
+        />
+        <label class="custom-control-label" for="customSwitch1"
+          >keep me logged in
+        </label>
+      </div>
+
+      <button type="submit" id="sub_btn" class="btn w-100 btn-primary mb-1">
+        Sign In
+      </button>
+      <a href="signup.html" class="badge badge-secondary py-1 w-100">join us</a>
+      <a href="home.html" class="badge badge-secondary py-1 w-100">Home</a>
+      <a href="events.html" class="badge badge-secondary py-1 w-100"
+        >Add An Event</a
+      >
+    </div>
+    <!---------------- js for showing the password ------------------->
+    <script>
+      function myFunction() {
+        var x = document.getElementById("passInput");
+
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+      }
+    </script>
+
+    <!---------------------js for firbase------------------->
+
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+        child,
+        get,
+      } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyC2560pETTPekmI-ABPf_xZ3M3UB6ZqMK4",
+        authDomain: "message-display-system.firebaseapp.com",
+        projectId: "message-display-system",
+        storageBucket: "message-display-system.appspot.com",
+        messagingSenderId: "260068152843",
+        appId: "1:260068152843:web:2336283608fddc0e41d90e",
+        measurementId: "G-HCK0JW6RYC",
+        databaseURL:
+          "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app", // 添加这一行
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      const database = getDatabase(app);
+
+      //---------------- js getting inputs --------------//
+      const username = document.getElementById("userInput");
+      const pass = document.getElementById("passInput");
+      const submit = document.getElementById("sub_btn");
+
+      //--------------- Checking users----------------//
+      function AuthenticateUser() {
+        const dbRef = ref(database);
+
+        get(child(dbRef, "UsersList/" + username.value)).then((snapshot) => {
+          if (snapshot.exists()) {
+            let dbpass = decPass(snapshot.val().password);
+            if (dbpass == pass.value) {
+              login(snapshot.val());
+            } else {
+              alert("user not found");
+            }
+          } else {
+            alert("user is  invalid");
+          }
+        });
+      }
+      //------------------------------------Decryption for the  Password------------------------------------//
+
+      function decPass(dbpass) {
+        var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
+        return pass12.toString(CryptoJS.enc.Utf8);
+      }
+
+      //------------------------------------Logging  In ------------------------------------//`
+
+      function login(user) {
+        let KeepLoggedIn = document.getElementById("customSwitch1").checked;
+
+        if (!KeepLoggedIn) {
+          sessionStorage.setItem("user", JSON.stringify(user));
+          window.location = "view_eventlist.html";
+        } else {
+          localStorage.setItem("KeepLoggedIn", "yes");
+          localStorage.setItem("user", JSON.stringify(user));
+          window.location = "view_eventlist.html";
+        }
+      }
+
+      submit.addEventListener("click", AuthenticateUser);
+    </script>
+  </body>
+</html>
