@@ -6,6 +6,7 @@ import {
   doc,
   getDoc,
   addDoc,
+  setDoc,
   getDocs,
   orderBy,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
@@ -150,6 +151,8 @@ export async function fetchDataFromFirestore() {
     editButton.textContent = "Edit";
     editButton.addEventListener("click", function () {
       // Add your edit logic here
+      const uid = doc.id;
+      window.location.href = `edit_event.html?uid=${uid}`;
     });
 
     const displayButton = document.createElement("button");
@@ -179,8 +182,6 @@ export async function fetchAnEventData(uid) {
 
   if (docSnap.exists()) {
     const eventData = docSnap.data();
-    // 现在你可以使用 eventData 对象来填充你的 HTML 页面
-    // 例如：
     document.getElementById("eventName").textContent = eventData.eventName;
     document.getElementById("organiserName").textContent =
       eventData.organiserName;
@@ -190,7 +191,6 @@ export async function fetchAnEventData(uid) {
       eventData.eventLocation;
 
     const { formattedDate, formattedTime } = formatDate(eventData.eventDate);
-
     document.getElementById("eventDate").textContent = formattedDate;
     document.getElementById("time").textContent = formattedTime;
 
@@ -198,4 +198,34 @@ export async function fetchAnEventData(uid) {
   } else {
     console.log("No such document!");
   }
+}
+
+export async function getEventDataForEdit(uid) {
+  const docRef = doc(db, "eventsCreated", uid);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const eventData = docSnap.data();
+    document.getElementById("cename").value = eventData.eventName || "";
+    document.getElementById("ceorganiser").value =
+      eventData.organiserName || "";
+    document.getElementById("cecategory").value = eventData.eventCategory || "";
+    document.getElementById("celocation").value = eventData.eventLocation || "";
+    document.getElementById("cedate").value = eventData.eventDate || "";
+    document.getElementById("cewifi").value = eventData.wifi || "";
+  } else {
+    console.log("No such document!");
+  }
+}
+
+function getQueryParam(param) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(param);
+}
+
+export async function updateEventInDB(eventData) {
+  const uid = getQueryParam("uid");
+  const eventRef = doc(db, "eventsCreated", uid);
+
+  await setDoc(eventRef, eventData);
 }
