@@ -17,7 +17,7 @@
     </nav>
     <div id="body">
       <h2 id="solo">Edit Event</h2>
-      <form method="post" id="eventDetails" action="http://">
+      <form method="post" id="eventDetails" action="#">
         <fieldset>
           <legend id="personaldetails">Create</legend>
           <label for="name">Name of the Event: </label>
@@ -59,17 +59,9 @@
             id="cedate"
             required="required"
           /></br>
-          <!-- <label for="time">Time: </label>
-            <input
-              type="text"
-              name="time"
-              id="cetime"
-              pattern="^[a-zA-Z]{1,20}$"
-              required="required"
-            /> -->
           <label for="wifi">WiFi: </label>
           <input
-            type="wifi"
+            type="text"
             name="wifi"
             id="cewifi"
             pattern="^[a-zA-Z]{1,20}$"
@@ -89,17 +81,62 @@
       </footer>
     </div>
   </body>
-  <script>
-    document
-      .getElementById("createEventButton")
-      .addEventListener("click", function () {
-        window.location.href = "./create_event.html";
-      });
+  <script type="module">
+    import { getEventDataForEdit, updateEventInDB } from "./backend/firestore.js";
+    document.addEventListener('DOMContentLoaded', function() {
+    
+    // document.getElementById("createEventButton").addEventListener("click", function() {
+    //     window.location.href = "./create_event.html";
+    // });
 
-    document
-      .getElementById("viewEventButton")
-      .addEventListener("click", function () {
-        window.location.href = "./view_eventlist.html";
-      });
+    // document.getElementById("viewEventButton").addEventListener("click", function() {
+    //     window.location.href = "./view_eventlist.html";
+    // });
+
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+    const uid = getQueryParam("uid");
+
+    getEventDataForEdit(uid).then(eventData => {
+        if (eventData) {
+            document.getElementById('cename').value = eventData.eventName || '';
+            document.getElementById('ceorganiser').value = eventData.organiserName || '';
+            document.getElementById('cecategory').value = eventData.eventCategory || '';
+            document.getElementById('celocation').value = eventData.eventLocation || '';
+            document.getElementById('cedate').value = eventData.eventDate || ''; 
+            document.getElementById('cewifi').value = eventData.wifi || '';
+        }
+    }).catch(error => {
+        console.error("Error fetching event data:", error);
+    });    
+
+
+    function updateEventData(event) {
+      event.preventDefault();
+
+      const eventData = {
+        eventName: document.getElementById('cename').value,
+        organiserName: document.getElementById('ceorganiser').value,
+        eventCategory: document.getElementById('cecategory').value,
+        eventLocation: document.getElementById('celocation').value,
+        eventDate: document.getElementById('cedate').value,
+        wifi: document.getElementById('cewifi').value
+      };
+
+    updateEventInDB(eventData)
+        .then(() => {
+            console.log('Event updated successfully!');
+            window.location.href = './view_eventlist.html';
+        })
+        .catch((error) => {
+            console.error('Error updating event:', error);
+            console.log('Failed to update event. Please try again.');
+        });
+    }
+    document.getElementById("eventDetails").addEventListener("submit", updateEventData);
+    });
+
   </script>
 </html>
