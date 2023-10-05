@@ -8,6 +8,7 @@ import {
   addDoc,
   setDoc,
   getDocs,
+  deleteDoc,
   orderBy,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 import {
@@ -228,4 +229,9 @@ export async function updateEventInDB(eventData) {
   const eventRef = doc(db, "eventsCreated", uid);
 
   await setDoc(eventRef, eventData);
+}
+
+export async function deleteEventInDB(uid) {
+  const eventRef = doc(db, "eventsCreated", uid);
+  await deleteDoc(eventRef);
 }

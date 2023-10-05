@@ -19,7 +19,7 @@
       <h2 id="solo">Edit Event</h2>
       <form method="post" id="eventDetails" action="#">
         <fieldset>
-          <legend id="personaldetails">Create</legend>
+          <legend id="personaldetails">Edit</legend>
           <label for="name">Name of the Event: </label>
           <input
             type="text"
@@ -27,7 +27,7 @@
             id="cename"
             pattern="^[a-zA-Z]{1,20}$"
             required="required"
-          /></br>
+          /><br />
           <label for="organiser">Organiser: </label>
           <input
             type="text"
@@ -35,7 +35,7 @@
             id="ceorganiser"
             pattern="^[a-zA-Z]{1,20}$"
             required="required"
-          /></br>
+          /><br />
           <label for="category">Category: </label>
           <input
             type="text"
@@ -43,7 +43,7 @@
             id="cecategory"
             pattern="^[a-zA-Z]{1,20}$"
             required="required"
-          /></br>
+          /><br />
           <label for="location">Location: </label>
           <input
             type="text"
@@ -51,14 +51,14 @@
             id="celocation"
             pattern="^[a-zA-Z]{1,20}$"
             required="required"
-          /></br>
+          /><br />
           <label for="date">Date: </label>
           <input
             type="datetime-local"
             name="date"
             id="cedate"
             required="required"
-          /></br>
+          /><br />
           <label for="wifi">WiFi: </label>
           <input
             type="text"
@@ -70,6 +70,7 @@
         </fieldset>
         <fieldset id="cebutton">
           <input type="submit" value="Save" />
+          <button id="deleteButton">Delete</button>
         </fieldset>
       </form>
 
@@ -82,61 +83,86 @@
     </div>
   </body>
   <script type="module">
-    import { getEventDataForEdit, updateEventInDB } from "./backend/firestore.js";
-    document.addEventListener('DOMContentLoaded', function() {
-    
-    // document.getElementById("createEventButton").addEventListener("click", function() {
-    //     window.location.href = "./create_event.html";
-    // });
+    import {
+      getEventDataForEdit,
+      updateEventInDB,
+      deleteEventInDB,
+    } from "./backend/firestore.js";
+    document.addEventListener("DOMContentLoaded", function () {
+      // document.getElementById("createEventButton").addEventListener("click", function() {
+      //     window.location.href = "./create_event.html";
+      // });
 
-    // document.getElementById("viewEventButton").addEventListener("click", function() {
-    //     window.location.href = "./view_eventlist.html";
-    // });
+      // document.getElementById("viewEventButton").addEventListener("click", function() {
+      //     window.location.href = "./view_eventlist.html";
+      // });
 
-    function getQueryParam(param) {
+      function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
-    }
-    const uid = getQueryParam("uid");
+      }
+      const uid = getQueryParam("uid");
 
-    getEventDataForEdit(uid).then(eventData => {
-        if (eventData) {
-            document.getElementById('cename').value = eventData.eventName || '';
-            document.getElementById('ceorganiser').value = eventData.organiserName || '';
-            document.getElementById('cecategory').value = eventData.eventCategory || '';
-            document.getElementById('celocation').value = eventData.eventLocation || '';
-            document.getElementById('cedate').value = eventData.eventDate || ''; 
-            document.getElementById('cewifi').value = eventData.wifi || '';
-        }
-    }).catch(error => {
-        console.error("Error fetching event data:", error);
-    });    
-
-
-    function updateEventData(event) {
-      event.preventDefault();
-
-      const eventData = {
-        eventName: document.getElementById('cename').value,
-        organiserName: document.getElementById('ceorganiser').value,
-        eventCategory: document.getElementById('cecategory').value,
-        eventLocation: document.getElementById('celocation').value,
-        eventDate: document.getElementById('cedate').value,
-        wifi: document.getElementById('cewifi').value
-      };
-
-    updateEventInDB(eventData)
-        .then(() => {
-            console.log('Event updated successfully!');
-            window.location.href = './view_eventlist.html';
+      getEventDataForEdit(uid)
+        .then((eventData) => {
+          if (eventData) {
+            document.getElementById("cename").value = eventData.eventName || "";
+            document.getElementById("ceorganiser").value =
+              eventData.organiserName || "";
+            document.getElementById("cecategory").value =
+              eventData.eventCategory || "";
+            document.getElementById("celocation").value =
+              eventData.eventLocation || "";
+            document.getElementById("cedate").value = eventData.eventDate || "";
+            document.getElementById("cewifi").value = eventData.wifi || "";
+          }
         })
         .catch((error) => {
-            console.error('Error updating event:', error);
-            console.log('Failed to update event. Please try again.');
+          console.error("Error fetching event data:", error);
         });
-    }
-    document.getElementById("eventDetails").addEventListener("submit", updateEventData);
-    });
 
+      function updateEventData(event) {
+        event.preventDefault();
+
+        const eventData = {
+          eventName: document.getElementById("cename").value,
+          organiserName: document.getElementById("ceorganiser").value,
+          eventCategory: document.getElementById("cecategory").value,
+          eventLocation: document.getElementById("celocation").value,
+          eventDate: document.getElementById("cedate").value,
+          wifi: document.getElementById("cewifi").value,
+        };
+
+        updateEventInDB(eventData)
+          .then(() => {
+            console.log("Event updated successfully!");
+            window.location.href = "./view_eventlist.html";
+          })
+          .catch((error) => {
+            console.error("Error updating event:", error);
+            console.log("Failed to update event. Please try again.");
+          });
+      }
+      document
+        .getElementById("eventDetails")
+        .addEventListener("submit", updateEventData);
+
+      document
+        .getElementById("deleteButton")
+        .addEventListener("click", function () {
+          event.preventDefault();
+          if (confirm("Are you sure you want to delete this event?")) {
+            deleteEventInDB(uid)
+              .then(() => {
+                console.log("Event deleted successfully!");
+                window.location.href = "./view_eventlist.html";
+              })
+              .catch((error) => {
+                console.error("Error deleting event:", error);
+                alert("Failed to delete event. Please try again.");
+              });
+          }
+        });
+    });
   </script>
 </html>
