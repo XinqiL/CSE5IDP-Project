@@ -10,6 +10,8 @@ import {
   getDocs,
   deleteDoc,
   orderBy,
+  query,
+  where,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 import {
   getAuth,
@@ -234,4 +236,85 @@ export async function updateEventInDB(eventData) {
 export async function deleteEventInDB(uid) {
   const eventRef = doc(db, "eventsCreated", uid);
   await deleteDoc(eventRef);
+}
+
+export async function searchEvents(term) {
+  try {
+    const searchQuery = query(
+      collection(db, "eventsCreated"),
+      where("eventName", "==", term)
+    );
+
+    const querySnapshot = await getDocs(searchQuery);
+    const tableBody = document.getElementById("eventTableBody");
+    tableBody.innerHTML = ""; // Clear existing events from the table before displaying search results
+
+    querySnapshot.forEach((doc) => {
+      const event = doc.data();
+      const row = document.createElement("tr");
+
+      const eventCell = document.createElement("td");
+      eventCell.textContent = event.eventName;
+      row.appendChild(eventCell);
+
+      const organiserCell = document.createElement("td");
+      organiserCell.textContent = event.organiserName;
+      row.appendChild(organiserCell);
+
+      const categoryCell = document.createElement("td");
+      categoryCell.textContent = event.eventCategory;
+      row.appendChild(categoryCell);
+
+      const locationCell = document.createElement("td");
+      locationCell.textContent = event.eventLocation;
+      row.appendChild(locationCell);
+
+      const { formattedDate, formattedTime } = formatDate(event.eventDate);
+      const dateCell = document.createElement("td");
+      dateCell.textContent = formattedDate;
+      row.appendChild(dateCell);
+
+      const timeCell = document.createElement("td");
+      timeCell.textContent = formattedTime;
+      row.appendChild(timeCell);
+
+      const wifiCell = document.createElement("td");
+      wifiCell.textContent = event.wifi;
+      row.appendChild(wifiCell);
+
+      // Create buttons
+      const editButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", function () {
+        // Add your edit logic here
+        const uid = doc.id;
+        window.location.href = `edit_event.html?uid=${uid}`;
+      });
+
+      const displayButton = document.createElement("button");
+      displayButton.textContent = "Display";
+      displayButton.addEventListener("click", function () {
+        // Add your display logic here
+        const uid = doc.id;
+        window.location.href = `display_event.html?uid=${uid}`;
+      });
+
+      // Create cells for buttons and append buttons
+      const editCell = document.createElement("td");
+      editCell.appendChild(editButton);
+      row.appendChild(editCell);
+
+      const displayCell = document.createElement("td");
+      displayCell.appendChild(displayButton);
+      row.appendChild(displayCell);
+
+      tableBody.appendChild(row);
+    });
+
+    if (querySnapshot.empty) {
+      console.log("No events found for the given term.");
+    }
+  } catch (error) {
+    console.error("Error searching events:", error);
+  }
 }

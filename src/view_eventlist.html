@@ -56,6 +56,10 @@
     </nav>
     <div id="body">
       <h2 id="solo">View Events List</h2>
+      <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search for events..." />
+          <button id="searchButton">Search</button>
+      </div>      
       <div id="eventData">
         <table class="table table">
           <thead>
@@ -145,7 +149,7 @@
       </footer>
     </div>
     <script type="module">
-      import { fetchDataFromFirestore } from "./backend/firestore.js";
+      import { fetchDataFromFirestore, searchEvents } from "./backend/firestore.js";
 
       document
         .getElementById("createEventButton")
@@ -160,6 +164,18 @@
         });
 
       fetchDataFromFirestore();
+
+      document.getElementById("searchButton").addEventListener("click", function(event) {
+        event.preventDefault(); // prevent any default behavior, useful if the button is inside a form
+        const searchTerm = document.getElementById("searchInput").value.trim();        
+        if (searchTerm) { // Ensure there's something to search
+          searchEvents(searchTerm);
+        } else {
+          alert("Please enter a search term!");
+          fetchDataFromFirestore(); // Optionally, you can reload all events if the search is cleared
+        }
+      });
+
     </script>
   </body>
 </html>
