@@ -40,9 +40,9 @@
           <li class="nav-item">
             <a class="nav-link" href="home.html">Home</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" id="createEventNavItem">
             <a class="nav-link" id="createEventButton" href="create_event.html"
-              >EVENTS</a
+              >Create Event</a
             >
           </li>
           <li class="nav-item active">
@@ -129,8 +129,19 @@
         localStorage.removeItem("KeepLoggedIn");
         window.location = "home.html";
       }
+
+      function toggleCreateEventLink() {
+        let createEventNavItem = document.getElementById("createEventNavItem");
+        if (currentUser) {
+          createEventNavItem.style.display = "block"; // show if user is logged in
+        } else {
+          createEventNavItem.style.display = "none"; // hide if user is not logged in
+        }
+      }
+
       window.onload = function () {
         getUsername();
+        toggleCreateEventLink();
 
         if (currentUser == null) {
           fetchDataFromFirestore(currentUser);
