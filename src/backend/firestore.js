@@ -109,7 +109,7 @@ function formatDate(dateString) {
 }
 
 // fetch data from Firestore
-export async function fetchDataFromFirestore() {
+export async function fetchDataFromFirestore(currentUser) {
   const querySnapshot = await getDocs(
     collection(db, "eventsCreated"),
     orderBy("createdAt")
@@ -149,32 +149,33 @@ export async function fetchDataFromFirestore() {
     wifiCell.textContent = event.wifi;
     row.appendChild(wifiCell);
 
-    // Create buttons
-    const editButton = document.createElement("button");
-    editButton.textContent = "Edit";
-    editButton.addEventListener("click", function () {
-      // Add your edit logic here
-      const uid = doc.id;
-      window.location.href = `edit_event.html?uid=${uid}`;
-    });
+    if (currentUser) {
+      // Create buttons
+      const editButton = document.createElement("button");
+      editButton.textContent = "Edit";
+      editButton.addEventListener("click", function () {
+        // Add your edit logic here
+        const uid = doc.id;
+        window.location.href = `edit_event.html?uid=${uid}`;
+      });
 
-    const displayButton = document.createElement("button");
-    displayButton.textContent = "Display";
-    displayButton.addEventListener("click", function () {
-      // Add your display logic here
-      const uid = doc.id;
-      window.location.href = `display_event.html?uid=${uid}`;
-    });
+      const displayButton = document.createElement("button");
+      displayButton.textContent = "Display";
+      displayButton.addEventListener("click", function () {
+        // Add your display logic here
+        const uid = doc.id;
+        window.location.href = `display_event.html?uid=${uid}`;
+      });
 
-    // Create cells for buttons and append buttons
-    const editCell = document.createElement("td");
-    editCell.appendChild(editButton);
-    row.appendChild(editCell);
+      // Create cells for buttons and append buttons
+      const editCell = document.createElement("td");
+      editCell.appendChild(editButton);
+      row.appendChild(editCell);
 
-    const displayCell = document.createElement("td");
-    displayCell.appendChild(displayButton);
-    row.appendChild(displayCell);
-
+      const displayCell = document.createElement("td");
+      displayCell.appendChild(displayButton);
+      row.appendChild(displayCell);
+    }
     tableBody.appendChild(row);
   });
 }
@@ -238,7 +239,7 @@ export async function deleteEventInDB(uid) {
   await deleteDoc(eventRef);
 }
 
-export async function searchEvents(term) {
+export async function searchEvents(term, currentUser) {
   try {
     const searchQuery = query(
       collection(db, "eventsCreated"),
@@ -282,32 +283,33 @@ export async function searchEvents(term) {
       wifiCell.textContent = event.wifi;
       row.appendChild(wifiCell);
 
-      // Create buttons
-      const editButton = document.createElement("button");
-      editButton.textContent = "Edit";
-      editButton.addEventListener("click", function () {
-        // Add your edit logic here
-        const uid = doc.id;
-        window.location.href = `edit_event.html?uid=${uid}`;
-      });
+      if (currentUser) {
+        // Create buttons
+        const editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.addEventListener("click", function () {
+          // Add your edit logic here
+          const uid = doc.id;
+          window.location.href = `edit_event.html?uid=${uid}`;
+        });
 
-      const displayButton = document.createElement("button");
-      displayButton.textContent = "Display";
-      displayButton.addEventListener("click", function () {
-        // Add your display logic here
-        const uid = doc.id;
-        window.location.href = `display_event.html?uid=${uid}`;
-      });
+        const displayButton = document.createElement("button");
+        displayButton.textContent = "Display";
+        displayButton.addEventListener("click", function () {
+          // Add your display logic here
+          const uid = doc.id;
+          window.location.href = `display_event.html?uid=${uid}`;
+        });
 
-      // Create cells for buttons and append buttons
-      const editCell = document.createElement("td");
-      editCell.appendChild(editButton);
-      row.appendChild(editCell);
+        // Create cells for buttons and append buttons
+        const editCell = document.createElement("td");
+        editCell.appendChild(editButton);
+        row.appendChild(editCell);
 
-      const displayCell = document.createElement("td");
-      displayCell.appendChild(displayButton);
-      row.appendChild(displayCell);
-
+        const displayCell = document.createElement("td");
+        displayCell.appendChild(displayButton);
+        row.appendChild(displayCell);
+      }
       tableBody.appendChild(row);
     });
 
