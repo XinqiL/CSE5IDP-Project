@@ -35,11 +35,9 @@
             <li class="nav-item active">
               <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
             </li>
+           
             <li class="nav-item">
-              <a class="nav-link" href="events.html">EVENTS</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="eventlist.html">Events List</a>
+              <a class="nav-link" href="view_eventlist.html">Events List</a>
             </li>
             <a class="nav-link" href="about.html">About Us</a>
           </li>
@@ -53,6 +51,9 @@
                 <li class="nav-item mx-1">
                     <a id="Signoutlink" class="nav-link" href="">Signout</a>
                 </li>
+                <li class="nav-item mx-1">
+                  <a id ="Editlink" class="nav-link" href=""></a>
+              </li>
             </ul>    
            
           </form>
@@ -115,6 +116,12 @@
           Signoutlink.classList.replace("nav-link","btn");
           Signoutlink.classList.add("btn-success"); 
           Signoutlink.href ="javascript:Signout()";
+          
+          
+          Editlink.innerText = "Edit Account";
+          Editlink.classList.replace("nav-link","btn");
+          Editlink.classList.add("btn-success"); 
+          Editlink.href ="edit_account.html";
         }
         //.Signoutlink.addEventListener("click",Signout);
       }

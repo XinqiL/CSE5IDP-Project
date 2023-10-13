@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Conference | Booking" />
+    <meta name="keywords" content="conferences, meetings, bookings" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Home</title>
+    <title>MeetBook | Create Event</title>
+    <!-- References to external CSS files -->
+    <style>
+      body {
+        background-color: #90a9b0;
+      }
+    </style>
+   
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item ">
+            <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" id="createEventButton" href="create_event.html">EVENTS</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="view_eventlist.html" id="viewEventButton">Events List</a>
+          </li>
+          <a class="nav-link" href="about.html" >About Us</a>
+        </li>
+          
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <ul class="navbar-nav mr-auto">
+              <li class="nav-item mx-1">
+                <a id="userlink" class="nav-link" href="">Username</a>
+              </li>
+              <li class="nav-item mx-1">
+                  <a id="Signoutlink" class="nav-link" href="">Signout</a>
+              </li>
+          </ul>    
+         
+        </form>
+      </div>
+    </nav>
+   
+      
+   
+   
+      <script>
+    
+          let userlink = document.getElementById('userlink');
+          let signoutlink = document.getElementById('signoutlink');
+          let header = document.getElementById("abc");
+          var currentUser = null;
+    
+          function getUsername(){
+            let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
+    
+            if(KeepLoggedIn == "yes"){
+                 currentUser = JSON.parse(localStorage.getItem('user'));
+            }
+    
+            else{
+                 currentUser = JSON.parse(sessionStorage.getItem("user"));
+            }
+          }
+    
+          function Signout(){
+            sessionStorage.removeItem('user');
+            localStorage.removeItem('user');
+            localStorage.removeItem('KeepLoggedIn');  
+            window.location = "home.html"; 
+    
+    
+          }
+          window.onload = function(){
+            getUsername();
+            
+            if(currentUser == null){
+              userlink.innerText = "Create an account";
+              userlink.classList.replace("nav-link","btn");
+              userlink.classList.add("btn-primary");
+              userlink.href ="signup.html";
+    
+              Signoutlink.innerText = "Login";
+              Signoutlink.classList.replace("nav-link","btn");
+              Signoutlink.classList.add("btn-success");
+              Signoutlink.href ="login.html";
+            
+            }
+    
+            else{ 
+              userlink.innerText = currentUser.username;
+              userlink.innerText = "Welcome "+ currentUser.fullname;
+              userlink.classList.replace("btn","nav-link");
+              userlink.classList.add("btn-primary");
+              userlink.href ="#";
+    
+              Signoutlink.innerText = "Sign Out";
+              Signoutlink.classList.replace("nav-link","btn");
+              Signoutlink.classList.add("btn-success"); 
+              Signoutlink.href ="javascript:Signout()";
+
+              Editlink.innerText = "Edit Account";
+              Editlink.classList.replace("nav-link","btn");
+              Editlink.classList.add("btn-success"); 
+              Editlink.href ="edit_account.html";
+            }
+            //.Signoutlink.addEventListener("click",Signout);
+          }
+          
+        </script>
+       
+          <tbody id="eventTableBody">
+            <!-- Rows will be added here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+     
+    </div>
+    <script type="module">
+      import { fetchDataFromFirestore } from "./backend/firestore.js";
+
+      document
+        .getElementById("createEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./create_event.html";
+        });
+
+      document
+        .getElementById("viewEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./view_eventlist.html";
+        });
+
+      fetchDataFromFirestore();
+    </script>
+ 
+     
+    </nav>
+    <div id="body">
+      <h2 id="solo">Create an Event</h2>
+
+      <form method="post" id="eventDetails" action="http://">
+        <fieldset>
+          <legend id="personaldetails">Create</legend>
+          <label for="name">Name of the Event: </label>
+          <input type="text" name="name" id="cename" required="required" />
+          <label for="organiser">Organiser: </label>
+          <input
+            type="text"
+            name="organiser"
+            id="ceorganiser"
+            required="required"
+          />
+          <label for="category">Category: </label>
+          <input
+            type="text"
+            name="category"
+            id="cecategory"
+            required="required"
+          />
+          <label for="location">Location: </label>
+          <input
+            type="text"
+            name="location"
+            id="celocation"
+            required="required"
+          />
+          <label for="date">Date: </label>
+          <input
+            type="datetime-local"
+            name="date"
+            id="cedate"
+            required="required"
+          />
+          <!-- <label for="time">Time: </label>
+            <input
+              type="text"
+              name="time"
+              id="cetime"
+              pattern="^[a-zA-Z]{1,20}$"
+              required="required"
+            /> -->
+          <label for="wifi">WiFi: </label>
+          <input type="wifi" name="wifi" id="cewifi" required="required" />
+        </fieldset>
+        <fieldset id="cebutton">
+          <input type="submit" value="Submit" />
+        </fieldset>
+      </form>
+
+      <footer>
+        <p>
+          &#169; 2023 All rights reserved | Privacy Policy | Terms and
+          Conditions
+        </p>
+      </footer>
+    </div>
+    <script type="module">
+      import { addEventToFirestore } from "./backend/firestore.js";
+
+      document
+        .getElementById("createEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./create_event.html";
+        });
+
+      document
+        .getElementById("viewEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./view_eventlist.html";
+        });
+
+      document
+        .getElementById("eventDetails")
+        .addEventListener("submit", submitForm);
+
+      async function submitForm(e) {
+        e.preventDefault();
+        var eventName = document.getElementById("cename").value;
+        var organiserName = document.getElementById("ceorganiser").value;
+        var eventCategory = document.getElementById("cecategory").value;
+        var eventLocation = document.getElementById("celocation").value;
+        var eventDate = document.getElementById("cedate").value;
+        // var time = document.getElementById("cetime").value;
+        var wifi = document.getElementById("cewifi").value;
+
+        const saveData = {
+          eventName: eventName,
+          organiserName: organiserName,
+          eventCategory: eventCategory,
+          eventLocation: eventLocation,
+          eventDate: eventDate,
+          // time: time,
+          wifi: wifi,
+        };
+
+        try {
+          await addEventToFirestore(saveData);
+          console.log("Event successfully added, redirecting...");
+          window.location.href = "./view_eventlist.html";
+        } catch (error) {
+          console.error("Failed to add event, not redirecting.", error);
+        }
+      }
+    </script>
+  </body>
+</html>
