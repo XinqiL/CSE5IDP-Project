@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <title>Sign in</title>
+    <title>Sign In</title>
 
     <!--- Bootstrap link for overall CSS-->
     <link
@@ -21,6 +21,7 @@
     <script src=" https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 
     <!------------------------ Here is Css style( we can use an external one, not a problem )-->
+
     <style>
       body {
         background-color: #90a9b0;
@@ -35,59 +36,52 @@
     <!-------------- end of CSS------------------------------------>
   </head>
   <body>
-    <!----------------------------- Sign in form ----------------->
+    <!----------------------------- Sign up form ----------------->
     <div class="mb-3">
-      <h3 class="mb-2">Sign In</h3>
-
+      <h3 class="mb-3">Sign In as admin</h3>
+     
       <input
         type="text"
-        placeholder="username"
-        id="userInput"
+        placeholder="Email"
+        id="emailInput"
         class="form-control mb-2"
       />
+     
+
       <input
         type="password"
-        placeholder="Password"
+        placeholder="Enter Password"
         id="passInput"
         class="form-control mb-2"
       />
+
+     
       <input type="checkbox" onclick="myFunction()" />Show Password
 
-      <div class="custom-control custom-switch">
-        <input
-          type="checkbox"
-          class="custom-control-input"
-          id="customSwitch1"
-        />
-        <label class="custom-control-label" for="customSwitch1"
-          >keep me logged in
-        </label>
-      </div>
-
-      <button type="submit" id="sub_btn" class="btn w-100 btn-primary mb-1">
-        Sign In
+      <button type="submit" id="sub_btn" class="btn w-100 btn-primary mb-2">
+        Sign In 
       </button>
-      <a href="signup.html" class="badge badge-secondary py-1 w-100">join us</a>
-      <a href="view_eventlist.html" class="badge badge-secondary py-1 w-100"
-        >Home</a>
-      
+
+     
       
     </div>
+
     <!---------------- js for showing the password ------------------->
     <script>
       function myFunction() {
         var x = document.getElementById("passInput");
-
-        if (x.type === "password") {
+        
+        if ((x.type === "password")) {
           x.type = "text";
+          y.type = "text";
         } else {
           x.type = "password";
+          
         }
       }
     </script>
 
     <!---------------------js for firbase------------------->
-
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
@@ -118,15 +112,39 @@
       const database = getDatabase(app);
 
       //---------------- js getting inputs --------------//
-      const username = document.getElementById("userInput");
+  
+      const email = document.getElementById("emailInput");
+    
       const pass = document.getElementById("passInput");
+
       const submit = document.getElementById("sub_btn");
 
-      //--------------- Checking users----------------//
+      //----------------Validate the input-----------------//
+
+      
+       
+
+      function Validation() {
+        
+        var emailregex = /^[a-zA-Z0-9]+@[ecla].[com] +$/;
+       
+        var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+     
+      
+        
+        if (!emailregex.test(email.value)) {
+          alert("please enter a valid email");
+          return false;
+        
+        }
+        
+        return true;
+      }
+           //--------------- Checking users----------------//
       function AuthenticateUser() {
         const dbRef = ref(database);
 
-        get(child(dbRef, "UsersList/" + username.value)).then((snapshot) => {
+        get(child(dbRef, "UsersList/" + email.value)).then((snapshot) => {
           if (snapshot.exists()) {
             let dbpass = decPass(snapshot.val().password);
             if (dbpass == pass.value) {
@@ -162,6 +180,8 @@
       }
 
       submit.addEventListener("click", AuthenticateUser);
+    </script>
+     
     </script>
   </body>
 </html>
