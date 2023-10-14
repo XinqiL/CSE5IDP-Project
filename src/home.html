@@ -50,6 +50,9 @@
                 </li>
                 <li class="nav-item mx-1">
                     <a id="Signoutlink" class="nav-link" href="">Signout</a>
+                    <li class="nav-item mx-1">
+                      <a id ="Editlink" class="nav-link" href=""></a>
+                  </li>
                 </li>
             </ul>    
            
@@ -113,6 +116,11 @@
           Signoutlink.classList.replace("nav-link","btn");
           Signoutlink.classList.add("btn-success"); 
           Signoutlink.href ="javascript:Signout()";
+
+          Editlink.innerText = "Edit Account";
+          Editlink.classList.replace("nav-link","btn");
+          Editlink.classList.add("btn-success"); 
+          Editlink.href ="edit_account.html";
         }
         //.Signoutlink.addEventListener("click",Signout);
       }
