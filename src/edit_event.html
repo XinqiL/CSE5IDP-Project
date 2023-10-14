@@ -127,7 +127,7 @@
             type="text"
             name="name"
             id="cename"
-            pattern="^[a-zA-Z]{1,20}$"
+            pattern="^[a-zA-Z\s&]{1,50}$"
             required="required"
           /><br />
           <label for="organiser">Organiser: </label>
@@ -135,7 +135,7 @@
             type="text"
             name="organiser"
             id="ceorganiser"
-            pattern="^[a-zA-Z]{1,20}$"
+            pattern="^[a-zA-Z\s]{1,20}$"
             required="required"
           /><br />
           <label for="category">Category: </label>
@@ -143,7 +143,7 @@
             type="text"
             name="category"
             id="cecategory"
-            pattern="^[a-zA-Z]{1,20}$"
+            pattern="^[a-zA-Z\s]{1,20}$"
             required="required"
           /><br />
           <label for="location">Location: </label>
@@ -151,7 +151,7 @@
             type="text"
             name="location"
             id="celocation"
-            pattern="^[a-zA-Z]{1,20}$"
+            pattern="^[a-zA-Z0-9\s,]{1,50}$"
             required="required"
           /><br />
           <label for="date">Date: </label>
@@ -166,7 +166,7 @@
             type="text"
             name="wifi"
             id="cewifi"
-            pattern="^[a-zA-Z]{1,20}$"
+            pattern="^(Free|free|No|no)$"
             required="required"
           />
         </fieldset>
