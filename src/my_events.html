@@ -44,6 +44,11 @@
               >Events List<span class="sr-only">(current)</span></a
             >
           </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="my_events.html" id="myEventsButton"
+              >My Events<span class="sr-only">(current)</span></a
+            >
+          </li>
           <a class="nav-link" href="about.html">About Us</a>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -153,6 +158,12 @@
         .getElementById("viewEventButton")
         .addEventListener("click", function () {
           window.location.href = "./view_eventlist.html";
+        });
+
+      document
+        .getElementById("myEventsButton")
+        .addEventListener("click", function () {
+          window.location.href = `my_events.html?uid=${userId}`;
         });
 
       function getUserIdFromURL() {
