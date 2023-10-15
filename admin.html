@@ -121,30 +121,12 @@
 
       //----------------Validate the input-----------------//
 
-      
-       
-
-      function Validation() {
-        
-        var emailregex = /^[a-zA-Z0-9]+@[ecla].[com] +$/;
-       
-        var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-     
-      
-        
-        if (!emailregex.test(email.value)) {
-          alert("please enter a valid email");
-          return false;
-        
-        }
-        
-        return true;
-      }
+    
            //--------------- Checking users----------------//
-      function AuthenticateUser() {
+      function AuthenticateAdmin() {
         const dbRef = ref(database);
 
-        get(child(dbRef, "UsersList/" + email.value)).then((snapshot) => {
+        get(child(dbRef, "adminList/" + email.value)).then((snapshot) => {
           if (snapshot.exists()) {
             let dbpass = decPass(snapshot.val().password);
             if (dbpass == pass.value) {
@@ -166,22 +148,22 @@
 
       //------------------------------------Logging  In ------------------------------------//`
 
-      function login(user) {
+      function login(admin) {
         let KeepLoggedIn = document.getElementById("customSwitch1").checked;
 
         if (!KeepLoggedIn) {
-          sessionStorage.setItem("user", JSON.stringify(user));
+          sessionStorage.setItem("admin", JSON.stringify(admin));
           window.location = "view_eventlist.html";
         } else {
           localStorage.setItem("KeepLoggedIn", "yes");
-          localStorage.setItem("user", JSON.stringify(user));
+          localStorage.setItem("admin", JSON.stringify(admin));
           window.location = "view_eventlist.html";
         }
       }
 
-      submit.addEventListener("click", AuthenticateUser);
+      submit.addEventListener("click", AuthenticateAdmin);
     </script>
      
-    </script>
+    
   </body>
 </html>
