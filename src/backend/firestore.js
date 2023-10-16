@@ -15,8 +15,17 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 import {
   getAuth,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  child,
+  get,
+  push,
+} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -32,7 +41,21 @@ const firebaseConfig = {
 // Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const realtimedb = getDatabase(
+  app,
+  "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app"
+);
 const auth = getAuth();
+
+let userId = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    userId = user.uid;
+  } else {
+    userId = null;
+  }
+});
 
 // function to add an event to Firestore database
 export async function addEventToFirestore(event) {
@@ -154,7 +177,6 @@ export async function fetchDataFromFirestore(currentUser) {
       const editButton = document.createElement("button");
       editButton.textContent = "Edit";
       editButton.addEventListener("click", function () {
-        // Add your edit logic here
         const uid = doc.id;
         window.location.href = `edit_event.html?uid=${uid}`;
       });
@@ -162,9 +184,16 @@ export async function fetchDataFromFirestore(currentUser) {
       const displayButton = document.createElement("button");
       displayButton.textContent = "Display";
       displayButton.addEventListener("click", function () {
-        // Add your display logic here
         const uid = doc.id;
         window.location.href = `display_event.html?uid=${uid}`;
+      });
+
+      const addButton = document.createElement("button");
+      addButton.textContent = "Add";
+      addButton.addEventListener("click", function () {
+        const eventId = doc.id;
+        console.log(userId, eventId);
+        addEventToUser(userId, eventId);
       });
 
       // Create cells for buttons and append buttons
@@ -175,6 +204,10 @@ export async function fetchDataFromFirestore(currentUser) {
       const displayCell = document.createElement("td");
       displayCell.appendChild(displayButton);
       row.appendChild(displayCell);
+
+      const addCell = document.createElement("td");
+      addCell.appendChild(addButton);
+      row.appendChild(addCell);
     }
     tableBody.appendChild(row);
   });
@@ -318,5 +351,109 @@ export async function searchEvents(term, currentUser) {
     }
   } catch (error) {
     console.error("Error searching events:", error);
+  }
+}
+
+async function addEventToUser(userId, eventId) {
+  const dbRef = ref(realtimedb);
+  const userEventsRef = child(dbRef, `UserEvents/${userId}`);
+
+  try {
+    const snapshot = await get(userEventsRef);
+
+    if (snapshot.exists()) {
+      const userEvents = snapshot.val();
+
+      // Check if the eventId already exists in the user's events
+      if (userEvents.includes(eventId)) {
+        alert(
+          "This event is already added for you. Please choose another one. "
+        );
+        return; // Exit the function without adding the event
+      } else {
+        // Append the new eventId and update the user's events in the database
+        userEvents.push(eventId);
+        await set(userEventsRef, userEvents);
+        window.location.href = `my_events.html?uid=${userId}`;
+      }
+    } else {
+      // User has no events, set the new event as their first event
+      await set(userEventsRef, [eventId]);
+    }
+
+    alert("Event added successfully.");
+  } catch (error) {
+    console.error("Error adding event to user:", error);
+    alert("Error while adding the event. Please try again.");
+  }
+}
+
+export async function fetchDataForUserEvents(eventIds) {
+  try {
+    const tableBody = document.getElementById("eventTableBody");
+
+    for (const eventId of eventIds) {
+      if (!eventId) {
+        console.warn("Invalid eventId detected:", eventId);
+        continue; // skip this iteration of the loop
+      }
+
+      console.log(eventId);
+
+      const eventDoc = await getDoc(doc(db, "eventsCreated", eventId));
+      if (!eventDoc.exists()) {
+        console.warn(`Event with ID ${eventId} does not exist! Skipping...`);
+        continue; // skip this iteration of the loop
+      } else {
+        const event = eventDoc.data();
+
+        const row = document.createElement("tr");
+
+        const eventCell = document.createElement("td");
+        eventCell.textContent = event.eventName;
+        row.appendChild(eventCell);
+
+        const organiserCell = document.createElement("td");
+        organiserCell.textContent = event.organiserName;
+        row.appendChild(organiserCell);
+
+        const categoryCell = document.createElement("td");
+        categoryCell.textContent = event.eventCategory;
+        row.appendChild(categoryCell);
+
+        const locationCell = document.createElement("td");
+        locationCell.textContent = event.eventLocation;
+        row.appendChild(locationCell);
+
+        const { formattedDate, formattedTime } = formatDate(event.eventDate);
+        const dateCell = document.createElement("td");
+        dateCell.textContent = formattedDate;
+        row.appendChild(dateCell);
+
+        const timeCell = document.createElement("td");
+        timeCell.textContent = formattedTime;
+        row.appendChild(timeCell);
+
+        const wifiCell = document.createElement("td");
+        wifiCell.textContent = event.wifi;
+        row.appendChild(wifiCell);
+
+        tableBody.appendChild(row);
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching data for user events:", error);
+  }
+}
+
+export async function getEventsForUser(userId) {
+  const dbRef = ref(realtimedb);
+  const userEventsRef = child(dbRef, `UserEvents/${userId}`);
+
+  const snapshot = await get(userEventsRef);
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return [];
   }
 }
