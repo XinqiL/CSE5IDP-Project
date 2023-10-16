@@ -47,15 +47,17 @@ const realtimedb = getDatabase(
 );
 const auth = getAuth();
 
-let userId = null;
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    userId = user.uid;
-  } else {
-    userId = null;
-  }
-});
+export function getUserId() {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        resolve(user.uid);
+      } else {
+        resolve(null); // Resolve with null if no user is authenticated
+      }
+    });
+  });
+}
 
 // function to add an event to Firestore database
 export async function addEventToFirestore(event) {
@@ -133,6 +135,8 @@ function formatDate(dateString) {
 
 // fetch data from Firestore
 export async function fetchDataFromFirestore(currentUser) {
+  const userId = await getUserId();
+
   const querySnapshot = await getDocs(
     collection(db, "eventsCreated"),
     orderBy("createdAt")
@@ -192,7 +196,6 @@ export async function fetchDataFromFirestore(currentUser) {
       addButton.textContent = "Add";
       addButton.addEventListener("click", function () {
         const eventId = doc.id;
-        console.log(userId, eventId);
         addEventToUser(userId, eventId);
       });
 
@@ -398,8 +401,6 @@ export async function fetchDataForUserEvents(eventIds) {
         continue; // skip this iteration of the loop
       }
 
-      console.log(eventId);
-
       const eventDoc = await getDoc(doc(db, "eventsCreated", eventId));
       if (!eventDoc.exists()) {
         console.warn(`Event with ID ${eventId} does not exist! Skipping...`);
@@ -456,4 +457,13 @@ export async function getEventsForUser(userId) {
   } else {
     return [];
   }
+}
+
+export async function updateUserEventLink() {
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const myEventsButton = document.getElementById("myEventsButton");
+      myEventsButton.href = `my_events.html?uid=${user.uid}`;
+    }
+  });
 }
