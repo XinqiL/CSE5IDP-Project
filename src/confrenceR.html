@@ -53,25 +53,14 @@
     <!----------------------------- Sign up form ----------------->
     <div class="mb-3">
       <h3 class="mb-3">Sign Up as admin</h3>
-      <input
-        type="text"
-        placeholder="Fullname"
-        id="nameInput"
-        class="form-control mb-2"
-      />
+      
       <input
         type="text"
         placeholder="Email"
         id="emailInput"
         class="form-control mb-2"
       />
-      <input
-        type="text"
-        placeholder="Username"
-        id="userInput"
-        class="form-control mb-2"
-      />
-
+     
       <input
         type="password"
         name="validationpassword"
@@ -97,10 +86,10 @@
         Sign Up
       </button>
 
-      <a href="login.html" class="badge badge-secondary py-1 w-100"
+      <a href="admin.html" class="badge badge-secondary py-1 w-100"
         >Already have an account</a
       >
-      <a href="view_eventlist.html" class="badge badge-secondary py-1 w-100"
+      <a href="home.html" class="badge badge-secondary py-1 w-100"
         >Home</a
       >
     
@@ -168,39 +157,30 @@
       const database = getDatabase(app);
 
       //---------------- js getting inputs --------------//
-      const fullname = document.getElementById("nameInput");
+     
       const email = document.getElementById("emailInput");
-      const username = document.getElementById("userInput");
+      
       const pass = document.getElementById("passInput");
       const cpass = document.getElementById("cpassInput");
       
       const submit = document.getElementById("sub_btn");
      
       //----------------Validate the input-----------------//
-      function isEmptyOrSpaces(str){
-            return str === null || str.match(/^ *$/) !== null; 
-      
-      } 
+  
 
       function Validation() {
-        var fullnameregex = /^[a-zA-Z\s]+$/;
+        
         var emailregex = /^[a-zA-Z0-9].+@[a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9]+$/;
-        var userregex = /^[a-zA-Z0-9]+$/;
+        
         var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
      
       
-        if (!fullnameregex.test(fullname.value)) {
-          alert("please enter a valid name");
-          return false;
-        }
+      
         if (!emailregex.test(email.value)) {
           alert("please enter a valid email");
           return false;
         }
-        if (!userregex.test(username.value)) {
-          alert("please enter a valid username");
-          return false;
-        }
+       
         if( isEmptyOrSpaces(pass.value)){
             alert("password must not be  empty");
             return false;
@@ -219,24 +199,24 @@
 
       //--------------- Registersusers----------------//
 
-      function RegisterUsers() {
+      function RegisterAdmins() {
         if (!Validation()) {
           return;
         }
         const dbRef = ref(database);
 
-        get(child(dbRef, "adminList/" + username.value)).then((snapshot) => {
+        get(child(dbRef, "adminList/" + email.value)).then((snapshot) => {
           if (snapshot.exists()) {
-            alert("username already exists");
+            alert("Admin already exists");
           } else {
-            set(ref(database, "adminList/" + username.value), {
-              fullname: fullname.value,
+            set(ref(database, "adminList/" + email.value), {
+              
               email: email.value,
-              username: username.value,
+             
               password: encPass(),
             })
               .then(() => {
-                alert("user added successfully");
+                alert("admin added successfully");
               })
               .catch((error) => {
                 alert("error" + error);
@@ -252,7 +232,7 @@
         return pass12.toString();
       }
       //------------Add users to firebase -----------------//
-      submit.addEventListener("click", RegisterUsers);
+      submit.addEventListener("click", RegisterAdmins);
     </script>
   </body>
 </html>
