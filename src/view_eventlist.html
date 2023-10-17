@@ -112,7 +112,6 @@
       import {
         fetchDataFromFirestore,
         searchEvents,
-        updateUserEventLink,
       } from "./backend/firestore.js";
       let userlink = document.getElementById("userlink");
       let signoutlink = document.getElementById("signoutlink");
@@ -124,19 +123,22 @@
 
         if (KeepLoggedIn == "yes") {
           currentUser = JSON.parse(localStorage.getItem("user"));
+          console.log(currentUser);
         } else {
           currentUser = JSON.parse(sessionStorage.getItem("user"));
         }
       }
 
-      function getUserId() {
-        const user = firebase.auth().currentUser;
-        if (user) {
-          return user.uid;
-        } else {
-          return null;
-        }
-      }
+      // function getUserId() {
+      //   const user = firebase.auth().currentUser;
+      //   if (user) {
+      //     console.log(user.uid);
+
+      //     return user.uid;
+      //   } else {
+      //     return null;
+      //   }
+      // }
 
       function Signout() {
         sessionStorage.removeItem("user");
@@ -225,10 +227,9 @@
             searchEvents(searchTerm, currentUser);
           }
         });
-
-      document.addEventListener("DOMContentLoaded", function () {
-        updateUserEventLink();
-      });
+      // document.addEventListener("DOMContentLoaded", function () {
+      //   updateUserEventLink();
+      // });
     </script>
   </body>
 </html>
