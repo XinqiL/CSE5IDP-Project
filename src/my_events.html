@@ -98,7 +98,7 @@
     <script type="module">
       import {
         fetchDataFromFirestore,
-        fetchDataForUserEvents,
+        fetchDataForUserEventsByUsername,
         getEventsForUser,
       } from "./backend/firestore.js";
       let userlink = document.getElementById("userlink");
@@ -152,6 +152,7 @@
           });
         }
         //.Signoutlink.addEventListener("click",Signout);
+        handleUserEvents();
       };
 
       document
@@ -163,7 +164,7 @@
       document
         .getElementById("myEventsButton")
         .addEventListener("click", function () {
-          window.location.href = `my_events.html?uid=${userId}`;
+          window.location.href = "my_events.html";
         });
 
       function getUserIdFromURL() {
@@ -172,19 +173,14 @@
       }
 
       async function handleUserEvents() {
-        const userId = getUserIdFromURL();
-
-        if (userId) {
+        if (currentUser && currentUser.username) {
           try {
-            const eventIds = await getEventsForUser(userId);
-            fetchDataForUserEvents(eventIds);
+            await fetchDataForUserEventsByUsername(currentUser.username);
           } catch (error) {
             console.error("Error fetching events for user:", error);
           }
         }
       }
-
-      handleUserEvents();
     </script>
   </body>
 </html>

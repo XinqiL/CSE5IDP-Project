@@ -47,17 +47,18 @@ const realtimedb = getDatabase(
 );
 const auth = getAuth();
 
-export function getUserId() {
-  return new Promise((resolve, reject) => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        resolve(user.uid);
-      } else {
-        resolve(null); // Resolve with null if no user is authenticated
-      }
-    });
-  });
-}
+// let userId = null;
+// console.log(userId);
+
+// onAuthStateChanged(auth, (user) => {
+//   console.log(user);
+
+//   if (user) {
+//     userId = user.uid;
+//   } else {
+//     userId = null;
+//   }
+// });
 
 // function to add an event to Firestore database
 export async function addEventToFirestore(event) {
@@ -135,7 +136,7 @@ function formatDate(dateString) {
 
 // fetch data from Firestore
 export async function fetchDataFromFirestore(currentUser) {
-  const userId = await getUserId();
+  // const userId = await getUserId();
 
   const querySnapshot = await getDocs(
     collection(db, "eventsCreated"),
@@ -196,7 +197,10 @@ export async function fetchDataFromFirestore(currentUser) {
       addButton.textContent = "Add";
       addButton.addEventListener("click", function () {
         const eventId = doc.id;
-        addEventToUser(userId, eventId);
+        const username = currentUser.username;
+        console.log(username);
+
+        addEventToUser(username, eventId);
       });
 
       // Create cells for buttons and append buttons
@@ -357,32 +361,35 @@ export async function searchEvents(term, currentUser) {
   }
 }
 
-async function addEventToUser(userId, eventId) {
+async function addEventToUser(username, eventId) {
   const dbRef = ref(realtimedb);
-  const userEventsRef = child(dbRef, `UserEvents/${userId}`);
+  const userRef = child(dbRef, `UsersList/${username}`);
 
   try {
-    const snapshot = await get(userEventsRef);
+    const snapshot = await get(userRef);
 
-    if (snapshot.exists()) {
-      const userEvents = snapshot.val();
-
-      // Check if the eventId already exists in the user's events
-      if (userEvents.includes(eventId)) {
-        alert(
-          "This event is already added for you. Please choose another one. "
-        );
-        return; // Exit the function without adding the event
-      } else {
-        // Append the new eventId and update the user's events in the database
-        userEvents.push(eventId);
-        await set(userEventsRef, userEvents);
-        window.location.href = `my_events.html?uid=${userId}`;
-      }
-    } else {
-      // User has no events, set the new event as their first event
-      await set(userEventsRef, [eventId]);
+    if (!snapshot.exists()) {
+      alert("User not found. Please ensure the username is correct.");
+      return;
     }
+
+    let userData = snapshot.val();
+
+    // 如果用户数据中没有events属性，或者其不是数组，则初始化它
+    if (!Array.isArray(userData.events)) {
+      userData.events = [];
+    }
+
+    // 检查事件ID是否已经存在于用户的事件列表中
+    if (userData.events.includes(eventId)) {
+      alert("This event is already added for you. Please choose another one.");
+      return;
+    }
+
+    // 将新的eventId添加到用户的事件列表中，并更新数据库中的用户数据
+    userData.events.push(eventId);
+    await set(userRef, userData);
+    window.location.href = "my_events.html";
 
     alert("Event added successfully.");
   } catch (error) {
@@ -391,8 +398,20 @@ async function addEventToUser(userId, eventId) {
   }
 }
 
-export async function fetchDataForUserEvents(eventIds) {
+export async function fetchDataForUserEventsByUsername(username) {
   try {
+    const dbRef = ref(realtimedb);
+    const userRef = child(dbRef, `UsersList/${username}`);
+    const userSnapshot = await get(userRef);
+
+    if (!userSnapshot.exists()) {
+      console.warn(`User with username ${username} does not exist!`);
+      return;
+    }
+
+    const userData = userSnapshot.val();
+    const eventIds = userData.events || [];
+
     const tableBody = document.getElementById("eventTableBody");
 
     for (const eventId of eventIds) {
@@ -410,6 +429,7 @@ export async function fetchDataForUserEvents(eventIds) {
 
         const row = document.createElement("tr");
 
+        // ... [the rest of the code remains the same]
         const eventCell = document.createElement("td");
         eventCell.textContent = event.eventName;
         row.appendChild(eventCell);
@@ -459,11 +479,11 @@ export async function getEventsForUser(userId) {
   }
 }
 
-export async function updateUserEventLink() {
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      const myEventsButton = document.getElementById("myEventsButton");
-      myEventsButton.href = `my_events.html?uid=${user.uid}`;
-    }
-  });
-}
+// export async function updateUserEventLink() {
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       const myEventsButton = document.getElementById("myEventsButton");
+//       myEventsButton.href = `my_events.html?uid=${user.uid}`;
+//     }
+//   });
+// }
