@@ -154,9 +154,19 @@
         }
       }
 
+      function toggleMyEventsLink() {
+        let myEventsNavItem = document.getElementById("myEventsNavItem");
+        if (currentUser) {
+          myEventsNavItem.style.display = "block"; // show if user is logged in
+        } else {
+          myEventsNavItem.style.display = "none"; // hide if user is not logged in
+        }
+      }
+
       window.onload = function () {
         getUsername();
         toggleCreateEventLink();
+        toggleMyEventsLink();
 
         if (currentUser == null) {
           fetchDataFromFirestore(currentUser);
