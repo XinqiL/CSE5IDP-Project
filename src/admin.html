@@ -37,14 +37,20 @@
   <body>
     <!----------------------------- Sign in form ----------------->
     <div class="mb-3">
-      <h3 class="mb-2">Sign In As admin</h3>
+      <h3 class="mb-2">Sign In</h3>
 
       <input
         type="text"
-        placeholder="Email"
-        id="emailInput"
+        placeholder="Admin Name"
+        id="adminInput"
         class="form-control mb-2"
       />
+      <input
+      type="text"
+      placeholder="Email"
+      id="emailInput"
+      class="form-control mb-2"
+    />
       <input
         type="password"
         placeholder="Password"
@@ -118,7 +124,7 @@
       const database = getDatabase(app);
 
       //---------------- js getting inputs --------------//
-      const email = document.getElementById("emailInput");
+      const adminname = document.getElementById("adminInput");
       const pass = document.getElementById("passInput");
       const submit = document.getElementById("sub_btn");
 
@@ -126,7 +132,7 @@
       function AuthenticateUser() {
         const dbRef = ref(database);
 
-        get(child(dbRef, "adminsList/" + email.value)).then((snapshot) => {
+        get(child(dbRef, "adminsList/" + adminname.value)).then((snapshot) => {
           if (snapshot.exists()) {
             let dbpass = decPass(snapshot.val().password);
             if (dbpass == pass.value) {
@@ -156,7 +162,7 @@
           window.location = "view_eventlist.html";
         } else {
           localStorage.setItem("KeepLoggedIn", "yes");
-          localStorage.setItem("admin", JSON.stringify(admin));
+          localStorage.setItem("user", JSON.stringify(admin));
           window.location = "view_eventlist.html";
         }
       }

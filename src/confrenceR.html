@@ -62,8 +62,8 @@
       />
       <input
         type="text"
-        placeholder="Username"
-        id="userInput"
+        placeholder="Admin Name"
+        id="adminInput"
         class="form-control mb-2"
       />
 
@@ -93,7 +93,7 @@
       </button>
 
       <a href="admin.html" class="badge badge-secondary py-1 w-100"
-        >Already have an account</a
+        >Admin Sign In </a
       >
       <a href="view_eventlist.html" class="badge badge-secondary py-1 w-100"
         >Home</a
@@ -164,9 +164,9 @@
       const database = getDatabase(app);
 
       //---------------- js getting inputs --------------//
-      const fullname = document.getElementById("nameInput");
+      
       const email = document.getElementById("emailInput");
-      const username = document.getElementById("userInput");
+      const adminname = document.getElementById("adminInput");
       const pass = document.getElementById("passInput");
       const cpass = document.getElementById("cpassInput");
       
@@ -181,7 +181,7 @@
       function Validation() {
       
         var emailregex = /^[a-zA-Z0-9].+@[ecla]+.[com]+$/;
-        var userregex = /^[a-zA-Z0-9]+$/;
+        var adminregex = /^[a-zA-Z0-9]+$/;
         var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         var cpassregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
       
@@ -190,7 +190,7 @@
           alert("please enter a valid email");
           return false;
         }
-        if (!userregex.test(username.value)) {
+        if (!adminregex.test(adminname.value)) {
           alert("please enter a valid username");
           return false;
         }
@@ -221,14 +221,14 @@
         }
         const dbRef = ref(database);
 
-        get(child(dbRef, "adminsList/" + username.value)).then((snapshot) => {
+        get(child(dbRef, "adminsList/" + adminname.value)).then((snapshot) => {
           if (snapshot.exists()) {
             alert(" Admin username already exists");
           } else {
-            set(ref(database, "adminsList/" + username.value), {
+            set(ref(database, "adminsList/" + adminname.value), {
               
               email: email.value,
-              username: username.value,
+              adminname: adminname.value,
               password: encPass(),
             })
               .then(() => {
