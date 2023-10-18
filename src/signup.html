@@ -124,9 +124,9 @@
         var password = document.querySelector('input[name=validationpassword]').value;
         var confirm = document.querySelector('input[name=validationconfirmpassword]').value;
   
-        var matchedOrNot = (confirm == password) ? "Password matcheds" : "Passwords did not matched"; 
+        var matchedOrNot = (confirm == password) ? "Passwords matched" : "Passwords did not matched"; 
 
-        var color = (matchedOrNot == "Password matched") ? "green" : "red";
+        var color = (matchedOrNot == "Passwords matched") ? "green" : "red";
 
         document.getElementById("toggleconfirmPassword").className = color;
 

@@ -78,7 +78,7 @@
           <br><br>
           <button  id="Retbtn">Retrive</button>
           <button  id="Updbtn">Update</button>
-          <button  id="Delbtn">Delete</button>
+          <button  id="Delbtn" href="home.html">Delete</button>
           <script>
     
             let userlink = document.getElementById('userlink');
@@ -185,13 +185,9 @@
             var delBtn = document.getElementById("Delbtn");
 
 
-              //------------------------------------Decryption for the  Password------------------------------------//
+        
 
-            function decPass(dbpass) {
-            var pass12 = CryptoJS.AES.decrypt(dbpass, pass.value);
-              return pass12.toString(CryptoJS.enc.Utf8);
-      }
-
+       
 
 
 
@@ -246,7 +242,7 @@
             delBtn.addEventListener("click",DeleteData);
 
            // AddBtn.addEventListener("click",DeleteData);
-            
+             
           
 
       //------------------------------------Logging  In ------------------------------------//`
