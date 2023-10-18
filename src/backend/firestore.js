@@ -15,8 +15,17 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-firestore.js";
 import {
   getAuth,
+  onAuthStateChanged,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-auth.js";
+import {
+  getDatabase,
+  ref,
+  set,
+  child,
+  get,
+  push,
+} from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
 
 // Firebase config
 const firebaseConfig = {
@@ -32,7 +41,24 @@ const firebaseConfig = {
 // Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const realtimedb = getDatabase(
+  app,
+  "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app"
+);
 const auth = getAuth();
+
+// let userId = null;
+// console.log(userId);
+
+// onAuthStateChanged(auth, (user) => {
+//   console.log(user);
+
+//   if (user) {
+//     userId = user.uid;
+//   } else {
+//     userId = null;
+//   }
+// });
 
 // function to add an event to Firestore database
 export async function addEventToFirestore(event) {
@@ -110,6 +136,8 @@ function formatDate(dateString) {
 
 // fetch data from Firestore
 export async function fetchDataFromFirestore(currentUser) {
+  // const userId = await getUserId();
+
   const querySnapshot = await getDocs(
     collection(db, "eventsCreated"),
     orderBy("createdAt")
@@ -154,7 +182,6 @@ export async function fetchDataFromFirestore(currentUser) {
       const editButton = document.createElement("button");
       editButton.textContent = "Edit";
       editButton.addEventListener("click", function () {
-        // Add your edit logic here
         const uid = doc.id;
         window.location.href = `edit_event.html?uid=${uid}`;
       });
@@ -162,9 +189,18 @@ export async function fetchDataFromFirestore(currentUser) {
       const displayButton = document.createElement("button");
       displayButton.textContent = "Display";
       displayButton.addEventListener("click", function () {
-        // Add your display logic here
         const uid = doc.id;
         window.location.href = `display_event.html?uid=${uid}`;
+      });
+
+      const addButton = document.createElement("button");
+      addButton.textContent = "Add";
+      addButton.addEventListener("click", function () {
+        const eventId = doc.id;
+        const username = currentUser.username;
+        console.log(username);
+
+        addEventToUser(username, eventId);
       });
 
       // Create cells for buttons and append buttons
@@ -175,6 +211,10 @@ export async function fetchDataFromFirestore(currentUser) {
       const displayCell = document.createElement("td");
       displayCell.appendChild(displayButton);
       row.appendChild(displayCell);
+
+      const addCell = document.createElement("td");
+      addCell.appendChild(addButton);
+      row.appendChild(addCell);
     }
     tableBody.appendChild(row);
   });
@@ -320,3 +360,130 @@ export async function searchEvents(term, currentUser) {
     console.error("Error searching events:", error);
   }
 }
+
+async function addEventToUser(username, eventId) {
+  const dbRef = ref(realtimedb);
+  const userRef = child(dbRef, `UsersList/${username}`);
+
+  try {
+    const snapshot = await get(userRef);
+
+    if (!snapshot.exists()) {
+      alert("User not found. Please ensure the username is correct.");
+      return;
+    }
+
+    let userData = snapshot.val();
+
+    // 如果用户数据中没有events属性，或者其不是数组，则初始化它
+    if (!Array.isArray(userData.events)) {
+      userData.events = [];
+    }
+
+    // 检查事件ID是否已经存在于用户的事件列表中
+    if (userData.events.includes(eventId)) {
+      alert("This event is already added for you. Please choose another one.");
+      return;
+    }
+
+    // 将新的eventId添加到用户的事件列表中，并更新数据库中的用户数据
+    userData.events.push(eventId);
+    await set(userRef, userData);
+    window.location.href = "my_events.html";
+
+    alert("Event added successfully.");
+  } catch (error) {
+    console.error("Error adding event to user:", error);
+    alert("Error while adding the event. Please try again.");
+  }
+}
+
+export async function fetchDataForUserEventsByUsername(username) {
+  try {
+    const dbRef = ref(realtimedb);
+    const userRef = child(dbRef, `UsersList/${username}`);
+    const userSnapshot = await get(userRef);
+
+    if (!userSnapshot.exists()) {
+      console.warn(`User with username ${username} does not exist!`);
+      return;
+    }
+
+    const userData = userSnapshot.val();
+    const eventIds = userData.events || [];
+
+    const tableBody = document.getElementById("eventTableBody");
+
+    for (const eventId of eventIds) {
+      if (!eventId) {
+        console.warn("Invalid eventId detected:", eventId);
+        continue; // skip this iteration of the loop
+      }
+
+      const eventDoc = await getDoc(doc(db, "eventsCreated", eventId));
+      if (!eventDoc.exists()) {
+        console.warn(`Event with ID ${eventId} does not exist! Skipping...`);
+        continue; // skip this iteration of the loop
+      } else {
+        const event = eventDoc.data();
+
+        const row = document.createElement("tr");
+
+        // ... [the rest of the code remains the same]
+        const eventCell = document.createElement("td");
+        eventCell.textContent = event.eventName;
+        row.appendChild(eventCell);
+
+        const organiserCell = document.createElement("td");
+        organiserCell.textContent = event.organiserName;
+        row.appendChild(organiserCell);
+
+        const categoryCell = document.createElement("td");
+        categoryCell.textContent = event.eventCategory;
+        row.appendChild(categoryCell);
+
+        const locationCell = document.createElement("td");
+        locationCell.textContent = event.eventLocation;
+        row.appendChild(locationCell);
+
+        const { formattedDate, formattedTime } = formatDate(event.eventDate);
+        const dateCell = document.createElement("td");
+        dateCell.textContent = formattedDate;
+        row.appendChild(dateCell);
+
+        const timeCell = document.createElement("td");
+        timeCell.textContent = formattedTime;
+        row.appendChild(timeCell);
+
+        const wifiCell = document.createElement("td");
+        wifiCell.textContent = event.wifi;
+        row.appendChild(wifiCell);
+
+        tableBody.appendChild(row);
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching data for user events:", error);
+  }
+}
+
+export async function getEventsForUser(userId) {
+  const dbRef = ref(realtimedb);
+  const userEventsRef = child(dbRef, `UserEvents/${userId}`);
+
+  const snapshot = await get(userEventsRef);
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return [];
+  }
+}
+
+// export async function updateUserEventLink() {
+//   onAuthStateChanged(auth, (user) => {
+//     if (user) {
+//       const myEventsButton = document.getElementById("myEventsButton");
+//       myEventsButton.href = `my_events.html?uid=${user.uid}`;
+//     }
+//   });
+// }
