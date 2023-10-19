@@ -103,7 +103,9 @@
       <a href="view_eventlist.html" class="badge badge-secondary py-1 w-100"
         >Home</a
       >
-    
+      <a href="confrenceR.html" class="badge badge-secondary py-1 w-100"
+        >Sign up as admin </a
+      >
      
     </div>
 
@@ -124,9 +126,9 @@
         var password = document.querySelector('input[name=validationpassword]').value;
         var confirm = document.querySelector('input[name=validationconfirmpassword]').value;
   
-        var matchedOrNot = (confirm == password) ? "Password matched" : "Password did not matched"; 
+        var matchedOrNot = (confirm == password) ? "Passwords matched" : "Passwords did not matched"; 
 
-        var color = (matchedOrNot == "Password matched") ? "green" : "red";
+        var color = (matchedOrNot == "Passwords matched") ? "green" : "red";
 
         document.getElementById("toggleconfirmPassword").className = color;
 
@@ -187,7 +189,7 @@
         var emailregex = /^[a-zA-Z0-9].+@[a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9]+$/;
         var userregex = /^[a-zA-Z0-9]+$/;
         var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-     
+        var cpassregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
       
         if (!fullnameregex.test(fullname.value)) {
           alert("please enter a valid name");
@@ -213,7 +215,10 @@
             alert("Password must be more than 8 characters including uppercase, lowercase and special characters.");
             return false;
         }
-  
+        if (pass.value != cpass.value ){
+            alert ("Passwords did not match! Please try again!");
+            return false; 
+        }
         return true;
       }
 
