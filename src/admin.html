@@ -125,11 +125,12 @@
 
       //---------------- js getting inputs --------------//
       const adminname = document.getElementById("adminInput");
+      const email = document.getElementById("emialInput");
       const pass = document.getElementById("passInput");
       const submit = document.getElementById("sub_btn");
 
       //--------------- Checking users----------------//
-      function AuthenticateUser() {
+      function AuthenticateAdmin() {
         const dbRef = ref(database);
 
         get(child(dbRef, "adminsList/" + adminname.value)).then((snapshot) => {
@@ -138,10 +139,10 @@
             if (dbpass == pass.value) {
               login(snapshot.val());
             } else {
-              alert("user not found");
+              alert("admin not found");
             }
           } else {
-            alert("user is  invalid");
+            alert("admin is  invalid");
           }
         });
       }
@@ -159,15 +160,15 @@
 
         if (!KeepLoggedIn) {
           sessionStorage.setItem("admin", JSON.stringify(admin));
-          window.location = "view_eventlist.html";
+          window.location = "view_list_admin.html";
         } else {
           localStorage.setItem("KeepLoggedIn", "yes");
-          localStorage.setItem("user", JSON.stringify(admin));
-          window.location = "view_eventlist.html";
+          localStorage.setItem("admin", JSON.stringify(admin));
+          window.location = "view_list_admin.html";
         }
       }
 
-      submit.addEventListener("click", AuthenticateUser);
+      submit.addEventListener("click", AuthenticateAdmin);
     </script>
   </body>
 </html>
