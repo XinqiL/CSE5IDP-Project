@@ -78,7 +78,7 @@
         if(KeepLoggedIn == "yes"){
              currentUser = JSON.parse(localStorage.getItem('user'));
         }
-
+       
         else{
              currentUser = JSON.parse(sessionStorage.getItem("user"));
         }
@@ -107,14 +107,14 @@
           Signoutlink.href ="login.html";
         
         }
-
-        else{ 
+       
+        else{
           userlink.innerText = currentUser.username;
           userlink.innerText = "Welcome "+ currentUser.fullname;
           userlink.classList.replace("btn","nav-link");
           userlink.classList.add("btn-primary");
           userlink.href ="#";
-
+          
           Signoutlink.innerText = "Sign Out";
           Signoutlink.classList.replace("nav-link","btn");
           Signoutlink.classList.add("btn-success"); 
@@ -128,8 +128,16 @@
           Editlink.classList.add("btn-success"); 
           Editlink.href ="edit_account.html";
         }
-        //.Signoutlink.addEventListener("click",Signout);
+       
+          
+      
+      
+      
       }
+          
+           
+        //.Signoutlink.addEventListener("click",Signout);
+      
       
     </script>
 

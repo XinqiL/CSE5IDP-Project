@@ -215,7 +215,7 @@
 
       //--------------- Registersusers----------------//
 
-      function RegisterUsers() {
+      function RegisterAdmin() {
         if (!Validation()) {
           return;
         }
@@ -223,7 +223,7 @@
 
         get(child(dbRef, "adminsList/" + adminname.value)).then((snapshot) => {
           if (snapshot.exists()) {
-            alert(" Admin username already exists");
+            alert(" Admin name already exists");
           } else {
             set(ref(database, "adminsList/" + adminname.value), {
               
@@ -248,7 +248,7 @@
         return pass12.toString();
       }
       //------------Add users to firebase -----------------//
-      submit.addEventListener("click", RegisterUsers);
+      submit.addEventListener("click", RegisterAdmin);
     </script>
   </body>
 </html>
