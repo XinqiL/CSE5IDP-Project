@@ -153,11 +153,11 @@
 
         if (!KeepLoggedIn) {
           sessionStorage.setItem("user", JSON.stringify(user));
-          window.location = "view_eventlist.html";
+          window.location = "home.html";
         } else {
           localStorage.setItem("KeepLoggedIn", "yes");
           localStorage.setItem("user", JSON.stringify(user));
-          window.location = "view_eventlist.html";
+          window.location = "home.html";
         }
       }
 

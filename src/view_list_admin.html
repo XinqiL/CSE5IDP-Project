@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Conference | Booking" />
+    <meta name="keywords" content="conferences, meetings, bookings" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <title>View list admin</title>
+
+    <title>MeetBook | Search Event</title>
+    <!-- References to  CSS  -->
+    <style>
+      body {
+        background-color: #90a9b0;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="home.html">Home</a>
+          </li>
+          <li class="nav-item" id="createEventNavItem">
+            <a class="nav-link" id="createEventButton" href="create_event.html"
+              >Create Event</a
+            >
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="view_eventlist.html" id="viewEventButton"
+              >Events List<span class="sr-only">(current)</span></a
+            >
+          </li>
+          <a class="nav-link" href="about.html">About Us</a>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item mx-1">
+              <a id="adminlink" class="nav-link" href="">Adminname</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a id="Signoutlink" class="nav-link" href="">Signout</a>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </nav>
+
+    <div id="body">
+      <h2 id="solo">View Events List</h2>
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search for events..."
+        />
+        <button id="searchButton">Search</button>
+      </div>
+      <div id="eventData">
+        <table class="table table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Organiser</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>WiFi</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody id="eventTableBody">
+            <!-- Rows will be added here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <footer>
+        <p>
+          &#169; 2023 All rights reserved | Privacy Policy | Terms and
+          Conditions
+        </p>
+      </footer>
+    </div>
+    <script type="module">
+      import {
+        fetchDataFromFirestore,
+        searchEvents,
+      } from "./backend/firestore.js";
+      let adminlink = document.getElementById("adminlink");
+      let signoutlink = document.getElementById("signoutlink");
+      let header = document.getElementById("abc");
+      var currentAdmin = null;
+
+      function getAdminname() {
+        let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
+
+        if (KeepLoggedIn == "yes") {
+          currentAdmin = JSON.parse(localStorage.getItem("admin"));
+        } else {
+          currentAdmin = JSON.parse(sessionStorage.getItem("admin"));
+        }
+      }
+
+      function Signout() {
+        sessionStorage.removeItem("admin");
+        localStorage.removeItem("admin");
+        localStorage.removeItem("KeepLoggedIn");
+        window.location = "home.html";
+      }
+
+      function toggleCreateEventLink() {
+        let createEventNavItem = document.getElementById("createEventNavItem");
+        if (currentAdmin) {
+          createEventNavItem.style.display = "block"; // show if user is logged in
+        } else {
+          createEventNavItem.style.display = "none"; // hide if user is not logged in
+        }
+      }
+
+      window.onload = function () {
+        getAdminname();
+        toggleCreateEventLink();
+
+        if (currentAdmin == null) {
+          fetchDataFromFirestore(currentAdmin);
+          adminlink.innerText = "Create an account";
+          adminlink.classList.replace("nav-link", "btn");
+          adminlink.classList.add("btn-primary");
+          adminlink.href = "signup.html";
+
+          Signoutlink.innerText = "Login";
+          Signoutlink.classList.replace("nav-link", "btn");
+          Signoutlink.classList.add("btn-success");
+          Signoutlink.href = "login.html";
+        } else {
+          fetchDataFromFirestore(currentAdmin);
+          adminlink.innerText = currentAdmin.adminname;
+          adminlink.innerText = "Welcome "+ currentAdmin.adminname;
+          adminlink.classList.replace("btn", "nav-link");
+          adminlink.classList.add("btn-primary");
+          adminlink.href = "#";
+
+          Signoutlink.innerText = "Sign Out";
+          Signoutlink.classList.replace("nav-link", "btn");
+          Signoutlink.classList.add("btn-success");
+          Signoutlink.addEventListener("click", function (event) {
+            event.preventDefault();
+            Signout();
+          });
+        }
+        //.Signoutlink.addEventListener("click",Signout);
+      };
+
+      document
+        .getElementById("createEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./create_event.html";
+        });
+
+      document
+        .getElementById("viewEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./view_eventlist.html";
+        });
+
+      document
+        .getElementById("searchButton")
+        .addEventListener("click", function (event) {
+          event.preventDefault(); // prevent any default behavior, useful if the button is inside a form
+          const searchTerm = document
+            .getElementById("searchInput")
+            .value.trim();
+          if (searchTerm) {
+            // Ensure there's something to search
+            window.location.href = `search_event.html?query=${searchTerm}`;
+          } else {
+            alert("Please enter a search term!");
+            searchEvents(searchTerm, currentAdmin);
+          }
+        });
+    </script>
+  </body>
+</html>
