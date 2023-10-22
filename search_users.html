@@ -20,9 +20,15 @@
         margin-right: auto;
         width: 50%;
         border-radius: 50%;
+<<<<<<< Updated upstream
       }
        
        
+=======
+        
+      }
+     
+>>>>>>> Stashed changes
         
         }
        </style>
@@ -70,6 +76,10 @@
           <h3 id="abc"></h3>
          
           <h4>Search Users by their Username </h4>
+<<<<<<< Updated upstream
+=======
+          <div class="col-3" >
+>>>>>>> Stashed changes
           <label> Username :</label>
           <input type="text" id="userInput">
           <br>
@@ -78,9 +88,15 @@
           <br>
           <label> Email : </label>
           <input type="text" id="emailInput">
+<<<<<<< Updated upstream
           
           <br><br>
           <button  id="Retbtn">Find a fullname  of a user</button>
+=======
+          </div>
+          <br><br>
+          <button  id="Retbtn">Find a fullname  of the user</button>
+>>>>>>> Stashed changes
           
           <button  id="Delbtn" href="home.html">Delete their account</button>
           <script>
@@ -127,8 +143,13 @@
               }
       
               else{ 
+<<<<<<< Updated upstream
                 adminlink.innerText = currentUser.username;
                 adminlink.innerText = "Welcome "+ currentUser.fullname;
+=======
+                adminlink.innerText = currentUser.adminname;
+                adminlink.innerText = "Welcome "+ currentAdmin.adminname;
+>>>>>>> Stashed changes
                 adminlink.classList.replace("btn","nav-link");
                 adminlink.classList.add("btn-primary");
                 adminlink.href ="#";
