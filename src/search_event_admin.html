@@ -11,9 +11,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-    <title>Home</title>
-    <title>MeetBook | Create Event</title>
-    <!-- References to external CSS files -->
+    <title>MeetBook | Search Results</title>
     <style>
       body {
         background-color: #90a9b0;
@@ -42,7 +40,7 @@
               >Home <span class="sr-only">(current)</span></a
             >
           </li>
-          <li class="nav-item active">
+          <li class="nav-item active" id="createEventNavItem">
             <a class="nav-link" id="createEventButton" href="create_event.html"
               >Create Event</a
             >
@@ -67,7 +65,48 @@
       </div>
     </nav>
 
-    <script>
+    <div id="body">
+      <h2 id="solo">Search Results</h2>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search for events..."
+        />
+        <button id="searchButton">Search</button>
+      </div>
+
+      <div id="eventData">
+        <table class="table table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Organiser</th>
+              <th>Category</th>
+              <th>Location</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>WiFi</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="eventTableBody">
+            <!-- Rows will be added here by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <footer>
+        <p>
+          &#169; 2023 All rights reserved | Privacy Policy | Terms and
+          Conditions
+        </p>
+      </footer>
+    </div>
+
+    <script type="module">
+      import { searchEvents } from "./backend/firestore.js";
       let adminlink = document.getElementById("adminlink");
       let signoutlink = document.getElementById("signoutlink");
       let header = document.getElementById("abc");
@@ -90,8 +129,18 @@
         window.location = "home.html";
       }
 
+      function toggleCreateEventLink() {
+        let createEventNavItem = document.getElementById("createEventNavItem");
+        if (currentAdmin) {
+          createEventNavItem.style.display = "block"; // show if admin is logged in
+        } else {
+          createEventNavItem.style.display = "none"; // hide if admin is not logged in
+        }
+      }
+
       window.onload = function () {
         getAdminname();
+        toggleCreateEventLink();
 
         if (currentAdmin == null) {
           adminlink.innerText = "Create an account";
@@ -113,146 +162,32 @@
           Signoutlink.innerText = "Sign Out";
           Signoutlink.classList.replace("nav-link", "btn");
           Signoutlink.classList.add("btn-success");
-          Signoutlink.href = "javascript:Signout()";
+          Signoutlink.addEventListener("click", function (event) {
+            event.preventDefault();
+            Signout();
+          });
         }
         //.Signoutlink.addEventListener("click",Signout);
-      };
-    </script>
-
-    <tbody id="eventTableBody">
-      <!-- Rows will be added here by JavaScript -->
-    </tbody>
-
-    <script type="module">
-      import { fetchDataFromFirestore } from "./backend/firestore.js";
-
-      document
-        .getElementById("createEventButton")
-        .addEventListener("click", function () {
-          window.location.href = "./create_event.html";
-        });
-
-      document
-        .getElementById("viewEventButton")
-        .addEventListener("click", function () {
-          window.location.href = "./view_list_admin.html";
-        });
-
-      fetchDataFromFirestore();
-    </script>
-
-    <div id="body">
-      <h2 id="solo">Create an Event</h2>
-
-      <form method="post" id="eventDetails" action="http://">
-        <fieldset>
-          <label for="name">Name of the Event: </label>
-          <input
-            type="text"
-            name="name"
-            id="cename"
-            pattern="^[a-zA-Z\s&]{1,50}$"
-            required="required"
-          /><br />
-          <label for="organiser">Organiser: </label>
-          <input
-            type="text"
-            name="organiser"
-            id="ceorganiser"
-            pattern="^[a-zA-Z\s]{1,20}$"
-            required="required"
-          /><br />
-          <label for="category">Category: </label>
-          <input
-            type="text"
-            name="category"
-            id="cecategory"
-            pattern="^[a-zA-Z\s]{1,20}$"
-            required="required"
-          /><br />
-          <label for="location">Location: </label>
-          <input
-            type="text"
-            name="location"
-            id="celocation"
-            pattern="^[a-zA-Z0-9\s,]{1,50}$"
-            required="required"
-          /><br />
-          <label for="date">Date: </label>
-          <input
-            type="datetime-local"
-            name="date"
-            id="cedate"
-            required="required"
-          /><br />
-          <label for="wifi">WiFi: </label>
-          <input
-            type="text"
-            name="wifi"
-            id="cewifi"
-            pattern="^(Free|free|No|no)$"
-            placeholder="Free/No"
-            required="required"
-          />
-        </fieldset>
-        <fieldset id="cebutton">
-          <input type="submit" value="Submit" />
-        </fieldset>
-      </form>
-
-      <footer>
-        <p>
-          &#169; 2023 All rights reserved | Privacy Policy | Terms and
-          Conditions
-        </p>
-      </footer>
-    </div>
-    <script type="module">
-      import { addEventToFirestore } from "./backend/firestore.js";
-
-      document
-        .getElementById("createEventButton")
-        .addEventListener("click", function () {
-          window.location.href = "./create_event.html";
-        });
-
-      document
-        .getElementById("viewEventButton")
-        .addEventListener("click", function () {
-          window.location.href = "./view_list_admin.html";
-        });
-
-      document
-        .getElementById("eventDetails")
-        .addEventListener("submit", submitForm);
-
-      async function submitForm(e) {
-        e.preventDefault();
-        var eventName = document.getElementById("cename").value;
-        var organiserName = document.getElementById("ceorganiser").value;
-        var eventCategory = document.getElementById("cecategory").value;
-        var eventLocation = document.getElementById("celocation").value;
-        var eventDate = document.getElementById("cedate").value;
-        // var time = document.getElementById("cetime").value;
-        var wifi = document.getElementById("cewifi").value;
-
-        const saveData = {
-          eventName: eventName,
-          organiserName: organiserName,
-          eventCategory: eventCategory,
-          eventLocation: eventLocation,
-          eventDate: eventDate,
-          // time: time,
-          wifi: wifi,
-        };
-
-        try {
-          await addEventToFirestore(saveData);
-          console.log("Event successfully added, redirecting...");
-          window.location.href = "./view_list_admin.html";
-        } catch (error) {
-          console.error("Failed to add event, not redirecting.", error);
+        const searchTerm = getQueryParam("query");
+        if (searchTerm) {
+          searchEvents(searchTerm, currentAdmin);
         }
+      };
+      document
+        .getElementById("createEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./create_event.html";
+        });
+
+      document
+        .getElementById("viewEventButton")
+        .addEventListener("click", function () {
+          window.location.href = "./view_list_admin.html";
+        });
+
+      function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
       }
     </script>
   </body>

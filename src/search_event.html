@@ -106,7 +106,7 @@
     </div>
 
     <script type="module">
-      import { searchEvents } from "./backend/firestore.js";
+      import { userSearchEvents } from "./backend/firestore.js";
       let userlink = document.getElementById("userlink");
       let signoutlink = document.getElementById("signoutlink");
       let header = document.getElementById("abc");
@@ -170,7 +170,7 @@
         //.Signoutlink.addEventListener("click",Signout);
         const searchTerm = getQueryParam("query");
         if (searchTerm) {
-          searchEvents(searchTerm, currentUser);
+          userSearchEvents(searchTerm, currentUser);
         }
       };
       document
