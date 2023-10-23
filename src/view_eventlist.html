@@ -18,14 +18,11 @@
     <style>
       body {
         background-color: #90a9b0;
-        color :rgb(219, 175, 32)
-
-        
-      }
-      .table{
         color: rgb(219, 175, 32);
       }
-      
+      .table {
+        color: rgb(219, 175, 32);
+      }
     </style>
   </head>
   <body>
@@ -52,11 +49,11 @@
               >Events List<span class="sr-only">(current)</span></a
             >
           </li>
-          <li class="nav-item" id="createEventNavItem">
+          <!-- <li class="nav-item" id="createEventNavItem">
             <a class="nav-link" id="createEventButton" href="create_event.html"
               >Create Event</a
             >
-          </li>
+          </li> -->
           <li class="nav-item" id="myEventsNavItem">
             <a class="nav-link" id="myEventsButton" href="my_events.html"
               >My Events</a
@@ -89,10 +86,10 @@
           id="searchInput"
           placeholder="Search for events..."
         />
-        <button id="searchButton" >Search</button>
+        <button id="searchButton">Search</button>
       </div>
       <div id="eventData">
-        <table class="table bg-dark ">
+        <table class="table bg-dark">
           <thead>
             <tr>
               <th>Event</th>
@@ -123,6 +120,7 @@
       import {
         fetchDataFromFirestore,
         searchEvents,
+        fetchDataForUser,
       } from "./backend/firestore.js";
       let userlink = document.getElementById("userlink");
       let signoutlink = document.getElementById("signoutlink");
@@ -158,14 +156,14 @@
         window.location = "home.html";
       }
 
-      function toggleCreateEventLink() {
-        let createEventNavItem = document.getElementById("createEventNavItem");
-        if (currentUser) {
-          createEventNavItem.style.display = "block"; // show if user is logged in
-        } else {
-          createEventNavItem.style.display = "none"; // hide if user is not logged in
-        }
-      }
+      // function toggleCreateEventLink() {
+      //   let createEventNavItem = document.getElementById("createEventNavItem");
+      //   if (currentUser) {
+      //     createEventNavItem.style.display = "block"; // show if user is logged in
+      //   } else {
+      //     createEventNavItem.style.display = "none"; // hide if user is not logged in
+      //   }
+      // }
 
       function toggleMyEventsLink() {
         let myEventsNavItem = document.getElementById("myEventsNavItem");
@@ -178,11 +176,11 @@
 
       window.onload = function () {
         getUsername();
-        toggleCreateEventLink();
+        // toggleCreateEventLink();
         toggleMyEventsLink();
 
         if (currentUser == null) {
-          fetchDataFromFirestore(currentUser);
+          fetchDataForUser(currentUser);
           userlink.innerText = "Create an account";
           userlink.classList.replace("nav-link", "btn");
           userlink.classList.add("btn-primary");
@@ -193,7 +191,7 @@
           Signoutlink.classList.add("btn-success");
           Signoutlink.href = "login.html";
         } else {
-          fetchDataFromFirestore(currentUser);
+          fetchDataForUser(currentUser);
           userlink.innerText = currentUser.username;
           userlink.innerText = "Welcome " + currentUser.fullname;
           userlink.classList.replace("btn", "nav-link");
@@ -215,11 +213,11 @@
         //.Signoutlink.addEventListener("click",Signout);
       };
 
-      document
-        .getElementById("createEventButton")
-        .addEventListener("click", function () {
-          window.location.href = "./create_event.html";
-        });
+      // document
+      //   .getElementById("createEventButton")
+      //   .addEventListener("click", function () {
+      //     window.location.href = "./create_event.html";
+      //   });
 
       document
         .getElementById("viewEventButton")
