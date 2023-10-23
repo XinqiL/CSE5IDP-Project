@@ -172,13 +172,16 @@
             required="required"
           /><br />
           <label for="location">Location: </label>
-          <input
-            type="text"
-            name="location"
-            id="celocation"
-            pattern="^[a-zA-Z0-9\s,]{1,50}$"
-            required="required"
-          /><br />
+          <select name="location" id="celocation" required="required">
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+            <option value="ACT">ACT</option>
+            <option value="NT">NT</option></select
+          ><br />
           <label for="date">Date: </label>
           <input
             type="datetime-local"
@@ -187,14 +190,10 @@
             required="required"
           /><br />
           <label for="wifi">WiFi: </label>
-          <input
-            type="text"
-            name="wifi"
-            id="cewifi"
-            pattern="^(Free|free|No|no)$"
-            placeholder="Free/No"
-            required="required"
-          />
+          <select name="wifi" id="cewifi" required="required">
+            <option value="Free">Free</option>
+            <option value="N/A">N/A</option>
+          </select>
         </fieldset>
         <fieldset id="cebutton">
           <input type="submit" value="Submit" />
