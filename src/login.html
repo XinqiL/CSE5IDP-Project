@@ -123,6 +123,40 @@
       const pass = document.getElementById("passInput");
       const submit = document.getElementById("sub_btn");
 
+      //----------------Validate the input-----------------//
+     
+
+      function Validation() {
+     
+        var userregex = /^[a-zA-Z0-9]+$/;
+        var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+      
+      
+        if( isEmptyOrSpaces(username.value)){
+            alert("password must not be  empty");
+            return false;
+            }
+     
+        if (!userregex.test(username.value)) {
+          alert("please enter a valid username");
+          return false;
+        }
+        if( isEmptyOrSpaces(pass.value)){
+            alert("password must not be  empty");
+            return false;
+            }
+       
+        if (!passregex.test(pass.value)) {
+            alert("Password must be more than 8 characters including uppercase, lowercase and special characters.");
+            return false;
+        }
+      
+        return true;
+      }
+
+
+
+
       //--------------- Checking users----------------//
       function AuthenticateUser() {
         const dbRef = ref(database);
@@ -162,7 +196,7 @@
         }
       }
 
-      submit.addEventListener("click", AuthenticateUser);
+       submit.addEventListener("click", AuthenticateUser);
     </script>
   </body>
 </html>
