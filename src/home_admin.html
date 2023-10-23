@@ -24,6 +24,7 @@
 }
   }
  </style>
+    
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,7 +38,7 @@
             </li>
            
             <li class="nav-item">
-              <a class="nav-link" href="view_list_admin.html">Events List</a>
+              <a class="nav-link" href="view_eventlist.html">Events List</a>
             </li>
             <a class="nav-link" href="about.html">About Us</a>
           </li>
@@ -46,7 +47,7 @@
           <form class="form-inline my-2 my-lg-0">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item mx-1">
-                  <a id="adminlink" class="nav-link" href="">adminname</a>
+                  <a id="adminlink" class="nav-link" href="">Adminname</a>
                 </li>
                 <li class="nav-item mx-1">
                     <a id="Signoutlink" class="nav-link" href="">Signout</a>
@@ -60,14 +61,14 @@
         </div>
       </nav>
 
-    <h3 id="abc"></h3>
+    
     <img src="c.png" alt="c" class="center">
     <script>
     
       let adminlink = document.getElementById('adminlink');
       let signoutlink = document.getElementById('signoutlink');
       let header = document.getElementById("abc");
-      var currentUser = null;
+      var currentAdmin = null;
 
       function getAdminname(){
         let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
@@ -90,7 +91,7 @@
 
       }
       window.onload = function(){
-        getUsername();
+        getAdminname();
         
         if(currentAdmin == null){
           adminlink.innerText = "Create an account";
