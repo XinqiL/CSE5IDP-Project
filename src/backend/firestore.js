@@ -194,7 +194,7 @@ export async function fetchDataFromFirestore(currentUser) {
       });
 
       const addButton = document.createElement("button");
-      addButton.textContent = "Add";
+      addButton.textContent = "Add to my list";
       addButton.addEventListener("click", function () {
         const eventId = doc.id;
         const username = currentUser.username;
@@ -361,7 +361,7 @@ export async function fetchDataForUser(currentUser) {
 
     if (currentUser) {
       const addButton = document.createElement("button");
-      addButton.textContent = "Add";
+      addButton.textContent = "Add to my list";
       addButton.addEventListener("click", function () {
         const eventId = doc.id;
         const username = currentUser.username;
@@ -541,7 +541,7 @@ export async function userSearchEvents(term, currentUser) {
 
       if (currentUser) {
         const addButton = document.createElement("button");
-        addButton.textContent = "Add";
+        addButton.textContent = "Add to my list";
         addButton.addEventListener("click", function () {
           const eventId = doc.id;
           const username = currentUser.username;
