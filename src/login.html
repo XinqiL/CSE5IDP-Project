@@ -30,7 +30,7 @@
         height: 100vh;
         width: 100vw;
         margin: 0px;
-        color :rgb(219, 175, 32)
+        color: rgb(219, 175, 32);
       }
     </style>
     <!-------------- end of CSS------------------------------------>
@@ -69,10 +69,12 @@
         Sign In
       </button>
       <a href="signup.html" class="badge badge-secondary py-1 w-100">join us</a>
+      <a href="admin.html" class="badge badge-secondary py-1 w-100"
+        >Admin Sign In
+      </a>
       <a href="view_eventlist.html" class="badge badge-secondary py-1 w-100"
-        >Home</a>
-      
-      
+        >Home</a
+      >
     </div>
     <!---------------- js for showing the password ------------------->
     <script>
@@ -124,38 +126,34 @@
       const submit = document.getElementById("sub_btn");
 
       //----------------Validate the input-----------------//
-     
 
       function Validation() {
-     
         var userregex = /^[a-zA-Z0-9]+$/;
         var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-      
-      
-        if( isEmptyOrSpaces(username.value)){
-            alert("password must not be  empty");
-            return false;
-            }
-     
+
+        if (isEmptyOrSpaces(username.value)) {
+          alert("password must not be  empty");
+          return false;
+        }
+
         if (!userregex.test(username.value)) {
           alert("please enter a valid username");
           return false;
         }
-        if( isEmptyOrSpaces(pass.value)){
-            alert("password must not be  empty");
-            return false;
-            }
-       
-        if (!passregex.test(pass.value)) {
-            alert("Password must be more than 8 characters including uppercase, lowercase and special characters.");
-            return false;
+        if (isEmptyOrSpaces(pass.value)) {
+          alert("password must not be  empty");
+          return false;
         }
-      
+
+        if (!passregex.test(pass.value)) {
+          alert(
+            "Password must be more than 8 characters including uppercase, lowercase and special characters."
+          );
+          return false;
+        }
+
         return true;
       }
-
-
-
 
       //--------------- Checking users----------------//
       function AuthenticateUser() {
@@ -196,7 +194,7 @@
         }
       }
 
-       submit.addEventListener("click", AuthenticateUser);
+      submit.addEventListener("click", AuthenticateUser);
     </script>
   </body>
 </html>

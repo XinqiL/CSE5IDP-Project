@@ -36,7 +36,7 @@
           </li>
          
           <li class="nav-item">
-            <a class="nav-link" href="view_eventlist.html">Events List</a>
+            <a class="nav-link" href="view_list_admin.html">Events List</a>
           </li>
           <a class="nav-link" href="about.html">About Us</a>
         </li>
@@ -45,7 +45,7 @@
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav mr-auto">
               <li class="nav-item mx-1">
-                <a id="userlink" class="nav-link" href="">Username</a>
+                <a id="adminlink" class="nav-link" href="">Adminname</a>
               </li>
               <li class="nav-item mx-1">
                   <a id="Signoutlink" class="nav-link" href="">Signout</a>
@@ -59,39 +59,39 @@
     
     <script>
     
-      let userlink = document.getElementById('userlink');
+      let adminlink = document.getElementById('adminlink');
       let signoutlink = document.getElementById('signoutlink');
       let header = document.getElementById("abc");
-      var currentUser = null;
+      var currentAdmin = null;
 
-      function getUsername(){
+      function getAdminname(){
         let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
 
         if(KeepLoggedIn == "yes"){
-             currentUser = JSON.parse(localStorage.getItem('user'));
+             currentAdmin = JSON.parse(localStorage.getItem('admin'));
         }
 
         else{
-             currentUser = JSON.parse(sessionStorage.getItem("user"));
+             currentAdmin = JSON.parse(sessionStorage.getItem("admin"));
         }
       }
 
       function Signout(){
-        sessionStorage.removeItem('user');
-        localStorage.removeItem('user');
+        sessionStorage.removeItem('admin');
+        localStorage.removeItem('admin');
         localStorage.removeItem('KeepLoggedIn');  
         window.location = "home.html"; 
 
 
       }
       window.onload = function(){
-        getUsername();
+        getAdminname();
         
-        if(currentUser == null){
-          userlink.innerText = "Create an account";
-          userlink.classList.replace("nav-link","btn");
-          userlink.classList.add("btn-primary");
-          userlink.href ="signup.html";
+        if(currentAdmin == null){
+          adminlink.innerText = "Create an account";
+          adminlink.classList.replace("nav-link","btn");
+          adminlink.classList.add("btn-primary");
+          adminlink.href ="signup.html";
 
           Signoutlink.innerText = "Login";
           Signoutlink.classList.replace("nav-link","btn");
@@ -101,11 +101,11 @@
         }
 
         else{ 
-          userlink.innerText = currentUser.username;
-          userlink.innerText = "Welcome "+ currentUser.fullname;
-          userlink.classList.replace("btn","nav-link");
-          userlink.classList.add("btn-primary");
-          userlink.href ="#";
+          adminlink.innerText = currentAdmin.adminname;
+          adminlink.innerText = "Welcome Admin "+ currentAdmin.adminname;
+          adminlink.classList.replace("btn","nav-link");
+          adminlink.classList.add("btn-primary");
+          adminlink.href ="#";
 
           Signoutlink.innerText = "Sign Out";
           Signoutlink.classList.replace("nav-link","btn");
@@ -238,7 +238,7 @@
         updateEventInDB(eventData)
           .then(() => {
             console.log("Event updated successfully!");
-            window.location.href = "./view_eventlist.html";
+            window.location.href = "./view_list_admin.html";
           })
           .catch((error) => {
             console.error("Error updating event:", error);
@@ -257,7 +257,7 @@
             deleteEventInDB(uid)
               .then(() => {
                 console.log("Event deleted successfully!");
-                window.location.href = "./view_eventlist.html";
+                window.location.href = "./view_list_admin.html";
               })
               .catch((error) => {
                 console.error("Error deleting event:", error);
