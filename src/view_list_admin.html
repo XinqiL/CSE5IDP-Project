@@ -18,7 +18,14 @@
     <style>
       body {
         background-color: #90a9b0;
-      }
+      
+      color :rgb(219, 175, 32)
+
+        
+}
+.table{
+  color: rgb(219, 175, 32);
+}
     </style>
   </head>
   <body>
@@ -37,9 +44,7 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="home.html">Home</a>
-          </li>
+        
           <li class="nav-item" id="createEventNavItem">
             <a class="nav-link" id="createEventButton" href="create_event.html"
               >Create Event</a
@@ -49,8 +54,12 @@
             <a class="nav-link" href="view_eventlist.html" id="viewEventButton"
               >Events List<span class="sr-only">(current)</span></a
             >
+        </li>
+        <li>
+        <a class="nav-link" href="search_users.html">Search for a User</a>
+      
           </li>
-          <a class="nav-link" href="about.html">About Us</a>
+        
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav mr-auto">
@@ -76,7 +85,7 @@
         <button id="searchButton">Search</button>
       </div>
       <div id="eventData">
-        <table class="table table">
+        <table class="table bg-dark">
           <thead>
             <tr>
               <th>Event</th>
