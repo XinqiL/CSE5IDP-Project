@@ -229,6 +229,8 @@
       async function submitForm(e) {
         e.preventDefault();
         var eventName = document.getElementById("cename").value;
+        var eventNameLowercase = eventName.toLowerCase();
+        var eventNameKeywords = eventName.toLowerCase().split(" ");
         var organiserName = document.getElementById("ceorganiser").value;
         var eventCategory = document.getElementById("cecategory").value;
         var eventLocation = document.getElementById("celocation").value;
@@ -238,6 +240,8 @@
 
         const saveData = {
           eventName: eventName,
+          eventNameLowercase: eventNameLowercase,
+          eventNameKeywords: eventNameKeywords,
           organiserName: organiserName,
           eventCategory: eventCategory,
           eventLocation: eventLocation,
