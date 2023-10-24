@@ -84,6 +84,22 @@
         />
         <button id="searchButton">Search</button>
       </div>
+
+      <div class="filter-bar">
+        <label for="stateFilter">Select Location:</label>
+        <select id="stateFilter">
+          <option value="all">All</option>
+          <option value="NSW">NSW</option>
+          <option value="VIC">VIC</option>
+          <option value="QLD">QLD</option>
+          <option value="SA">SA</option>
+          <option value="WA">WA</option>
+          <option value="TAS">TAS</option>
+          <option value="ACT">ACT</option>
+          <option value="NT">NT</option>
+        </select>
+      </div>
+
       <div id="eventData">
         <table class="table bg-dark">
           <thead>
@@ -235,6 +251,13 @@
       // document.addEventListener("DOMContentLoaded", function () {
       //   updateUserEventLink();
       // });
+
+      document
+        .getElementById("stateFilter")
+        .addEventListener("change", function () {
+          const selectedState = this.value;
+          fetchDataForUser(currentUser, selectedState);
+        });
     </script>
   </body>
 </html>
