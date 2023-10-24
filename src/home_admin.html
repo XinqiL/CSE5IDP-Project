@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <title>Home</title>
+
+
+</head>    
+<body>
+ 
+ <style>
+  body {
+  
+   background-color: #90a9b0;
+   .center {
+   display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+  border-radius: 50%;
+}
+  }
+ </style>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="home_admin.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+           
+            <li class="nav-item">
+              <a class="nav-link" href="view_list_admin.html">Events List</a>
+            </li>
+            <a class="nav-link" href="about.html">About Us</a>
+          </li>
+            
+          </ul>
+          <form class="form-inline my-2 my-lg-0">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item mx-1">
+                  <a id="adminlink" class="nav-link" href="">Adminname</a>
+                </li>
+                <li class="nav-item mx-1">
+                    <a id="Signoutlink" class="nav-link" href="">Signout</a>
+                </li>
+                <li class="nav-item mx-1">
+                  <a id ="Editlink" class="nav-link" href=""></a>
+              </li>
+            </ul>    
+           
+          </form>
+        </div>
+      </nav>
+
+    
+    <img src="c.png" alt="c" class="center">
+    <script>
+    
+      let adminlink = document.getElementById('adminlink');
+      let signoutlink = document.getElementById('signoutlink');
+      let header = document.getElementById("abc");
+      var currentAdmin = null;
+
+      function getAdminname(){
+        let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
+
+        if(KeepLoggedIn == "yes"){
+             currentAdmin = JSON.parse(localStorage.getItem('admin'));
+        }
+       
+        else{
+             currentAdmin = JSON.parse(sessionStorage.getItem("admin"));
+        }
+      }
+
+      function Signout(){
+        sessionStorage.removeItem('admin');
+        localStorage.removeItem('admin');
+        localStorage.removeItem('KeepLoggedIn');  
+        window.location = "home.html"; 
+
+
+      }
+      window.onload = function(){
+        getAdminname();
+        
+        if(currentAdmin == null){
+          adminlink.innerText = "Create an account";
+          adminlink.classList.replace("nav-link","btn");
+          adminlink.classList.add("btn-primary");
+          adminlink.href ="signup.html";
+
+          Signoutlink.innerText = "Login";
+          Signoutlink.classList.replace("nav-link","btn");
+          Signoutlink.classList.add("btn-success");
+          Signoutlink.href ="login.html";
+        
+        }
+       
+        else{
+          adminlink.innerText = currentAdmin.adminname;
+          adminlink.innerText = "Welcome Admin "+ currentAdmin.adminname;
+          adminlink.classList.replace("btn","nav-link");
+          adminlink.classList.add("btn-primary");
+          adminlink.href ="#";
+          
+          Signoutlink.innerText = "Sign Out";
+          Signoutlink.classList.replace("nav-link","btn");
+          Signoutlink.classList.add("btn-success"); 
+          Signoutlink.href ="javascript:Signout()";
+          
+          Editlink.innerText = "Edit Account";
+          Editlink.classList.replace("nav-link","btn");
+          Editlink.classList.add("btn-success"); 
+          Editlink.href ="edit_account.html";
+        }
+       
+          
+      
+      
+      
+      }
+          
+           
+        //.Signoutlink.addEventListener("click",Signout);
+      
+      
+    </script>
+
+
+
+</body>
+</html>

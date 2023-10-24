@@ -17,6 +17,7 @@
     <style>
       body {
         background-color: #90a9b0;
+        color: rgb(219, 175, 32);
       }
     </style>
   </head>
@@ -38,7 +39,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="home.html"
+            <a class="nav-link" href="home_admin.html"
               >Home <span class="sr-only">(current)</span></a
             >
           </li>
@@ -87,7 +88,7 @@
         sessionStorage.removeItem("admin");
         localStorage.removeItem("admin");
         localStorage.removeItem("KeepLoggedIn");
-        window.location = "home.html";
+        window.location = "home_admin.html";
       }
 
       window.onload = function () {
@@ -171,13 +172,16 @@
             required="required"
           /><br />
           <label for="location">Location: </label>
-          <input
-            type="text"
-            name="location"
-            id="celocation"
-            pattern="^[a-zA-Z0-9\s,]{1,50}$"
-            required="required"
-          /><br />
+          <select name="location" id="celocation" required="required">
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+            <option value="ACT">ACT</option>
+            <option value="NT">NT</option></select
+          ><br />
           <label for="date">Date: </label>
           <input
             type="datetime-local"
@@ -186,14 +190,10 @@
             required="required"
           /><br />
           <label for="wifi">WiFi: </label>
-          <input
-            type="text"
-            name="wifi"
-            id="cewifi"
-            pattern="^(Free|free|No|no)$"
-            placeholder="Free/No"
-            required="required"
-          />
+          <select name="wifi" id="cewifi" required="required">
+            <option value="Free">Free</option>
+            <option value="N/A">N/A</option>
+          </select>
         </fieldset>
         <fieldset id="cebutton">
           <input type="submit" value="Submit" />
@@ -229,6 +229,8 @@
       async function submitForm(e) {
         e.preventDefault();
         var eventName = document.getElementById("cename").value;
+        var eventNameLowercase = eventName.toLowerCase();
+        var eventNameKeywords = eventName.toLowerCase().split(" ");
         var organiserName = document.getElementById("ceorganiser").value;
         var eventCategory = document.getElementById("cecategory").value;
         var eventLocation = document.getElementById("celocation").value;
@@ -238,6 +240,8 @@
 
         const saveData = {
           eventName: eventName,
+          eventNameLowercase: eventNameLowercase,
+          eventNameKeywords: eventNameKeywords,
           organiserName: organiserName,
           eventCategory: eventCategory,
           eventLocation: eventLocation,

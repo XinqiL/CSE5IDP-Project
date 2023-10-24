@@ -7,114 +7,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>MeetBook | Search Event</title>
     <!-- References to external CSS files -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <style>
       body {
-      
-       background-color: #90a9b0;
-       .center {
-       display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 50%;
-      border-radius: 50%;
-    }
+        background-color: #90a9b0;
+        .center {
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+          width: 50%;
+          border-radius: 50%;
+        }
       }
-     </style>
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    </style>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
-    
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="home.html"
+              >Home <span class="sr-only">(current)</span></a
+            >
           </li>
-         
+
           <li class="nav-item">
             <a class="nav-link" href="view_list_admin.html">Events List</a>
           </li>
           <a class="nav-link" href="about.html">About Us</a>
-        </li>
-          
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav mr-auto">
-              <li class="nav-item mx-1">
-                <a id="adminlink" class="nav-link" href="">Adminname</a>
-              </li>
-              <li class="nav-item mx-1">
-                  <a id="Signoutlink" class="nav-link" href="">Signout</a>
-              </li>
-          </ul>    
-         
+            <li class="nav-item mx-1">
+              <a id="adminlink" class="nav-link" href="">Adminname</a>
+            </li>
+            <li class="nav-item mx-1">
+              <a id="Signoutlink" class="nav-link" href="">Signout</a>
+            </li>
+          </ul>
         </form>
       </div>
     </nav>
     <h3 id="abc"></h3>
-    
+
     <script>
-    
-      let adminlink = document.getElementById('adminlink');
-      let signoutlink = document.getElementById('signoutlink');
+      let adminlink = document.getElementById("adminlink");
+      let signoutlink = document.getElementById("signoutlink");
       let header = document.getElementById("abc");
       var currentAdmin = null;
 
-      function getAdminname(){
+      function getAdminname() {
         let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
 
-        if(KeepLoggedIn == "yes"){
-             currentAdmin = JSON.parse(localStorage.getItem('admin'));
-        }
-
-        else{
-             currentAdmin = JSON.parse(sessionStorage.getItem("admin"));
+        if (KeepLoggedIn == "yes") {
+          currentAdmin = JSON.parse(localStorage.getItem("admin"));
+        } else {
+          currentAdmin = JSON.parse(sessionStorage.getItem("admin"));
         }
       }
 
-      function Signout(){
-        sessionStorage.removeItem('admin');
-        localStorage.removeItem('admin');
-        localStorage.removeItem('KeepLoggedIn');  
-        window.location = "home.html"; 
-
-
+      function Signout() {
+        sessionStorage.removeItem("admin");
+        localStorage.removeItem("admin");
+        localStorage.removeItem("KeepLoggedIn");
+        window.location = "home.html";
       }
-      window.onload = function(){
+      window.onload = function () {
         getAdminname();
-        
-        if(currentAdmin == null){
+
+        if (currentAdmin == null) {
           adminlink.innerText = "Create an account";
-          adminlink.classList.replace("nav-link","btn");
+          adminlink.classList.replace("nav-link", "btn");
           adminlink.classList.add("btn-primary");
-          adminlink.href ="signup.html";
+          adminlink.href = "signup.html";
 
           Signoutlink.innerText = "Login";
-          Signoutlink.classList.replace("nav-link","btn");
+          Signoutlink.classList.replace("nav-link", "btn");
           Signoutlink.classList.add("btn-success");
-          Signoutlink.href ="login.html";
-        
-        }
-
-        else{ 
+          Signoutlink.href = "login.html";
+        } else {
           adminlink.innerText = currentAdmin.adminname;
-          adminlink.innerText = "Welcome Admin "+ currentAdmin.adminname;
-          adminlink.classList.replace("btn","nav-link");
+          adminlink.innerText = "Welcome Admin " + currentAdmin.adminname;
+          adminlink.classList.replace("btn", "nav-link");
           adminlink.classList.add("btn-primary");
-          adminlink.href ="#";
+          adminlink.href = "#";
 
           Signoutlink.innerText = "Sign Out";
-          Signoutlink.classList.replace("nav-link","btn");
-          Signoutlink.classList.add("btn-success"); 
-          Signoutlink.href ="javascript:Signout()";
+          Signoutlink.classList.replace("nav-link", "btn");
+          Signoutlink.classList.add("btn-success");
+          Signoutlink.href = "javascript:Signout()";
         }
         //.Signoutlink.addEventListener("click",Signout);
-      }
-      
+      };
     </script>
 
     <div id="body">
@@ -147,6 +148,7 @@
             required="required"
           /><br />
           <label for="location">Location: </label>
+
           <input
             type="text"
             name="location"
@@ -154,6 +156,18 @@
             pattern="^[a-zA-Z]{1,20}$"
             required="required"
           /><br />
+
+          <select name="location" id="celocation" required="required">
+            <option value="NSW">NSW</option>
+            <option value="VIC">VIC</option>
+            <option value="QLD">QLD</option>
+            <option value="SA">SA</option>
+            <option value="WA">WA</option>
+            <option value="TAS">TAS</option>
+            <option value="ACT">ACT</option>
+            <option value="NT">NT</option></select
+          ><br />
+
           <label for="date">Date: </label>
           <input
             type="datetime-local"
@@ -162,6 +176,7 @@
             required="required"
           /><br />
           <label for="wifi">WiFi: </label>
+
           <input
             type="text"
             name="wifi"
@@ -169,6 +184,12 @@
             pattern="^[a-zA-Z]{1,20}$"
             required="required"
           />
+
+          <select name="wifi" id="cewifi" required="required">
+            <option value="Free">Free</option>
+            <option value="N/A">N/A</option>
+          </select>
+
         </fieldset>
         <fieldset id="cebutton">
           <input type="submit" value="Save" />
@@ -191,14 +212,6 @@
       deleteEventInDB,
     } from "./backend/firestore.js";
     document.addEventListener("DOMContentLoaded", function () {
-      // document.getElementById("createEventButton").addEventListener("click", function() {
-      //     window.location.href = "./create_event.html";
-      // });
-
-      // document.getElementById("viewEventButton").addEventListener("click", function() {
-      //     window.location.href = "./view_eventlist.html";
-      // });
-
       function getQueryParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
@@ -226,8 +239,16 @@
       function updateEventData(event) {
         event.preventDefault();
 
+        const eventName = document.getElementById("cename").value;
+        const eventNameLowercase = eventName.toLowerCase();
+
+        // Split the event name into an array of lowercase words
+        const eventNameKeywords = eventNameLowercase.split(/\s+/);
+
         const eventData = {
-          eventName: document.getElementById("cename").value,
+          eventName: eventName,
+          eventNameLowercase: eventNameLowercase,
+          eventNameKeywords: eventNameKeywords,
           organiserName: document.getElementById("ceorganiser").value,
           eventCategory: document.getElementById("cecategory").value,
           eventLocation: document.getElementById("celocation").value,
