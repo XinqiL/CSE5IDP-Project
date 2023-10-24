@@ -219,8 +219,16 @@
       function updateEventData(event) {
         event.preventDefault();
 
+        const eventName = document.getElementById("cename").value;
+        const eventNameLowercase = eventName.toLowerCase();
+
+        // Split the event name into an array of lowercase words
+        const eventNameKeywords = eventNameLowercase.split(/\s+/);
+
         const eventData = {
-          eventName: document.getElementById("cename").value,
+          eventName: eventName,
+          eventNameLowercase: eventNameLowercase,
+          eventNameKeywords: eventNameKeywords,
           organiserName: document.getElementById("ceorganiser").value,
           eventCategory: document.getElementById("cecategory").value,
           eventLocation: document.getElementById("celocation").value,

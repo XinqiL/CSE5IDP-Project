@@ -65,6 +65,12 @@ export async function addEventToFirestore(event) {
   try {
     const eventData = {
       ...(event.eventName && { eventName: event.eventName }),
+      ...(event.eventNameLowercase && {
+        eventNameLowercase: event.eventNameLowercase,
+      }),
+      ...(event.eventNameKeywords && {
+        eventNameKeywords: event.eventNameKeywords,
+      }),
       ...(event.eventCategory && { eventCategory: event.eventCategory }),
       ...(event.eventLocation && { eventLocation: event.eventLocation }),
       ...(event.eventDate && { eventDate: event.eventDate }),
@@ -415,79 +421,97 @@ export async function deleteEventInDB(uid) {
 
 export async function searchEvents(term, currentUser) {
   try {
-    const searchQuery = query(
+    const termLowercase = term.toLowerCase();
+
+    // Query using eventNameKeywords for individual words
+    const keywordSearchQuery = query(
       collection(db, "eventsCreated"),
-      where("eventName", "==", term)
+      where("eventNameKeywords", "array-contains", termLowercase)
     );
 
-    const querySnapshot = await getDocs(searchQuery);
+    // Query using eventNameLowercase for full string
+    const fullStringSearchQuery = query(
+      collection(db, "eventsCreated"),
+      where("eventNameLowercase", "==", termLowercase)
+    );
+
+    // Execute both queries
+    const keywordQuerySnapshot = await getDocs(keywordSearchQuery);
+    const fullStringQuerySnapshot = await getDocs(fullStringSearchQuery);
+
     const tableBody = document.getElementById("eventTableBody");
-    tableBody.innerHTML = ""; // Clear existing events from the table before displaying search results
+    tableBody.innerHTML = ""; // Clear existing events
 
-    querySnapshot.forEach((doc) => {
-      const event = doc.data();
-      const row = document.createElement("tr");
+    // Helper function to process query results
+    const processSnapshot = (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const event = doc.data();
+        const row = document.createElement("tr");
 
-      const eventCell = document.createElement("td");
-      eventCell.textContent = event.eventName;
-      row.appendChild(eventCell);
+        const eventCell = document.createElement("td");
+        eventCell.textContent = event.eventName;
+        row.appendChild(eventCell);
 
-      const organiserCell = document.createElement("td");
-      organiserCell.textContent = event.organiserName;
-      row.appendChild(organiserCell);
+        const organiserCell = document.createElement("td");
+        organiserCell.textContent = event.organiserName;
+        row.appendChild(organiserCell);
 
-      const categoryCell = document.createElement("td");
-      categoryCell.textContent = event.eventCategory;
-      row.appendChild(categoryCell);
+        const categoryCell = document.createElement("td");
+        categoryCell.textContent = event.eventCategory;
+        row.appendChild(categoryCell);
 
-      const locationCell = document.createElement("td");
-      locationCell.textContent = event.eventLocation;
-      row.appendChild(locationCell);
+        const locationCell = document.createElement("td");
+        locationCell.textContent = event.eventLocation;
+        row.appendChild(locationCell);
 
-      const { formattedDate, formattedTime } = formatDate(event.eventDate);
-      const dateCell = document.createElement("td");
-      dateCell.textContent = formattedDate;
-      row.appendChild(dateCell);
+        const { formattedDate, formattedTime } = formatDate(event.eventDate);
+        const dateCell = document.createElement("td");
+        dateCell.textContent = formattedDate;
+        row.appendChild(dateCell);
 
-      const timeCell = document.createElement("td");
-      timeCell.textContent = formattedTime;
-      row.appendChild(timeCell);
+        const timeCell = document.createElement("td");
+        timeCell.textContent = formattedTime;
+        row.appendChild(timeCell);
 
-      const wifiCell = document.createElement("td");
-      wifiCell.textContent = event.wifi;
-      row.appendChild(wifiCell);
+        const wifiCell = document.createElement("td");
+        wifiCell.textContent = event.wifi;
+        row.appendChild(wifiCell);
 
-      if (currentUser) {
-        // Create buttons
-        const editButton = document.createElement("button");
-        editButton.textContent = "Edit";
-        editButton.addEventListener("click", function () {
-          // Add your edit logic here
-          const uid = doc.id;
-          window.location.href = `edit_event.html?uid=${uid}`;
-        });
+        if (currentUser) {
+          // Create buttons
+          const editButton = document.createElement("button");
+          editButton.textContent = "Edit";
+          editButton.addEventListener("click", function () {
+            // Add your edit logic here
+            const uid = doc.id;
+            window.location.href = `edit_event.html?uid=${uid}`;
+          });
 
-        const displayButton = document.createElement("button");
-        displayButton.textContent = "Display";
-        displayButton.addEventListener("click", function () {
-          // Add your display logic here
-          const uid = doc.id;
-          window.location.href = `display_event.html?uid=${uid}`;
-        });
+          const displayButton = document.createElement("button");
+          displayButton.textContent = "Display";
+          displayButton.addEventListener("click", function () {
+            // Add your display logic here
+            const uid = doc.id;
+            window.location.href = `display_event.html?uid=${uid}`;
+          });
 
-        // Create cells for buttons and append buttons
-        const editCell = document.createElement("td");
-        editCell.appendChild(editButton);
-        row.appendChild(editCell);
+          // Create cells for buttons and append buttons
+          const editCell = document.createElement("td");
+          editCell.appendChild(editButton);
+          row.appendChild(editCell);
 
-        const displayCell = document.createElement("td");
-        displayCell.appendChild(displayButton);
-        row.appendChild(displayCell);
-      }
-      tableBody.appendChild(row);
-    });
+          const displayCell = document.createElement("td");
+          displayCell.appendChild(displayButton);
+          row.appendChild(displayCell);
+        }
+        tableBody.appendChild(row);
+      });
+    };
 
-    if (querySnapshot.empty) {
+    processSnapshot(keywordQuerySnapshot);
+    processSnapshot(fullStringQuerySnapshot);
+
+    if (keywordQuerySnapshot.empty && fullStringQuerySnapshot.empty) {
       console.log("No events found for the given term.");
     }
   } catch (error) {
@@ -497,67 +521,85 @@ export async function searchEvents(term, currentUser) {
 
 export async function userSearchEvents(term, currentUser) {
   try {
-    const searchQuery = query(
+    const termLowercase = term.toLowerCase();
+
+    // Query using eventNameKeywords for individual words
+    const keywordSearchQuery = query(
       collection(db, "eventsCreated"),
-      where("eventName", "==", term)
+      where("eventNameKeywords", "array-contains", termLowercase)
     );
 
-    const querySnapshot = await getDocs(searchQuery);
+    // Query using eventNameLowercase for full string
+    const fullStringSearchQuery = query(
+      collection(db, "eventsCreated"),
+      where("eventNameLowercase", "==", termLowercase)
+    );
+
+    // Execute both queries
+    const keywordQuerySnapshot = await getDocs(keywordSearchQuery);
+    const fullStringQuerySnapshot = await getDocs(fullStringSearchQuery);
+
     const tableBody = document.getElementById("eventTableBody");
-    tableBody.innerHTML = ""; // Clear existing events from the table before displaying search results
+    tableBody.innerHTML = ""; // Clear existing events
 
-    querySnapshot.forEach((doc) => {
-      const event = doc.data();
-      const row = document.createElement("tr");
+    // Helper function to process query results
+    const processSnapshot = (querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const event = doc.data();
+        const row = document.createElement("tr");
 
-      const eventCell = document.createElement("td");
-      eventCell.textContent = event.eventName;
-      row.appendChild(eventCell);
+        const eventCell = document.createElement("td");
+        eventCell.textContent = event.eventName;
+        row.appendChild(eventCell);
 
-      const organiserCell = document.createElement("td");
-      organiserCell.textContent = event.organiserName;
-      row.appendChild(organiserCell);
+        const organiserCell = document.createElement("td");
+        organiserCell.textContent = event.organiserName;
+        row.appendChild(organiserCell);
 
-      const categoryCell = document.createElement("td");
-      categoryCell.textContent = event.eventCategory;
-      row.appendChild(categoryCell);
+        const categoryCell = document.createElement("td");
+        categoryCell.textContent = event.eventCategory;
+        row.appendChild(categoryCell);
 
-      const locationCell = document.createElement("td");
-      locationCell.textContent = event.eventLocation;
-      row.appendChild(locationCell);
+        const locationCell = document.createElement("td");
+        locationCell.textContent = event.eventLocation;
+        row.appendChild(locationCell);
 
-      const { formattedDate, formattedTime } = formatDate(event.eventDate);
-      const dateCell = document.createElement("td");
-      dateCell.textContent = formattedDate;
-      row.appendChild(dateCell);
+        const { formattedDate, formattedTime } = formatDate(event.eventDate);
+        const dateCell = document.createElement("td");
+        dateCell.textContent = formattedDate;
+        row.appendChild(dateCell);
 
-      const timeCell = document.createElement("td");
-      timeCell.textContent = formattedTime;
-      row.appendChild(timeCell);
+        const timeCell = document.createElement("td");
+        timeCell.textContent = formattedTime;
+        row.appendChild(timeCell);
 
-      const wifiCell = document.createElement("td");
-      wifiCell.textContent = event.wifi;
-      row.appendChild(wifiCell);
+        const wifiCell = document.createElement("td");
+        wifiCell.textContent = event.wifi;
+        row.appendChild(wifiCell);
 
-      if (currentUser) {
-        const addButton = document.createElement("button");
-        addButton.textContent = "Add to my list";
-        addButton.addEventListener("click", function () {
-          const eventId = doc.id;
-          const username = currentUser.username;
-          console.log(username);
+        if (currentUser) {
+          const addButton = document.createElement("button");
+          addButton.textContent = "Add to my list";
+          addButton.addEventListener("click", function () {
+            const eventId = doc.id;
+            const username = currentUser.username;
+            console.log(username);
 
-          addEventToUser(username, eventId);
-        });
+            addEventToUser(username, eventId);
+          });
 
-        const addCell = document.createElement("td");
-        addCell.appendChild(addButton);
-        row.appendChild(addCell);
-      }
-      tableBody.appendChild(row);
-    });
+          const addCell = document.createElement("td");
+          addCell.appendChild(addButton);
+          row.appendChild(addCell);
+        }
+        tableBody.appendChild(row);
+      });
+    };
 
-    if (querySnapshot.empty) {
+    processSnapshot(keywordQuerySnapshot);
+    processSnapshot(fullStringQuerySnapshot);
+
+    if (keywordQuerySnapshot.empty && fullStringQuerySnapshot.empty) {
       console.log("No events found for the given term.");
     }
   } catch (error) {

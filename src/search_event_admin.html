@@ -169,8 +169,9 @@
         }
         //.Signoutlink.addEventListener("click",Signout);
         const searchTerm = getQueryParam("query");
-        if (searchTerm) {
-          searchEvents(searchTerm, currentAdmin);
+        const searchTermLowercase = searchTerm.toLowerCase();
+        if (searchTermLowercase) {
+          searchEvents(searchTermLowercase, currentAdmin);
         }
       };
       document
