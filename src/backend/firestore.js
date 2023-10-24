@@ -227,14 +227,19 @@ export async function fetchDataFromFirestore(currentUser) {
 }
 
 // fetch data from Firestore
-export async function fetchDataForAdmin(currentUser) {
-  // const userId = await getUserId();
+export async function fetchDataForAdmin(currentUser, state = "all") {
+  let eventsCollection = collection(db, "eventsCreated");
+  let finalQuery;
 
-  const querySnapshot = await getDocs(
-    collection(db, "eventsCreated"),
-    orderBy("createdAt")
-  );
+  if (state !== "all") {
+    finalQuery = query(eventsCollection, where("eventLocation", "==", state));
+  } else {
+    finalQuery = eventsCollection;
+  }
+
+  const querySnapshot = await getDocs(finalQuery);
   const tableBody = document.getElementById("eventTableBody");
+  tableBody.innerHTML = "";
 
   querySnapshot.forEach((doc) => {
     const event = doc.data();
@@ -323,14 +328,19 @@ export async function fetchAnEventData(uid) {
 }
 
 // fetch data from Firestore
-export async function fetchDataForUser(currentUser) {
-  // const userId = await getUserId();
+export async function fetchDataForUser(currentUser, state = "all") {
+  let eventsCollection = collection(db, "eventsCreated");
+  let finalQuery;
 
-  const querySnapshot = await getDocs(
-    collection(db, "eventsCreated"),
-    orderBy("createdAt")
-  );
+  if (state !== "all") {
+    finalQuery = query(eventsCollection, where("eventLocation", "==", state));
+  } else {
+    finalQuery = eventsCollection;
+  }
+
+  const querySnapshot = await getDocs(finalQuery);
   const tableBody = document.getElementById("eventTableBody");
+  tableBody.innerHTML = "";
 
   querySnapshot.forEach((doc) => {
     const event = doc.data();

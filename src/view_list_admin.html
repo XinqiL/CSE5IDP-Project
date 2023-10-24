@@ -18,14 +18,12 @@
     <style>
       body {
         background-color: #90a9b0;
-      
-      color :rgb(219, 175, 32)
 
-        
-}
-.table{
-  color: rgb(219, 175, 32);
-}
+        color: rgb(219, 175, 32);
+      }
+      .table {
+        color: rgb(219, 175, 32);
+      }
     </style>
   </head>
   <body>
@@ -56,12 +54,10 @@
             <a class="nav-link" href="view_list_admin.html" id="viewEventButton"
               >Events List<span class="sr-only">(current)</span></a
             >
-        </li>
-        <li>
-        <a class="nav-link" href="search_users.html">Search for a User</a>
-      
           </li>
-        
+          <li>
+            <a class="nav-link" href="search_users.html">Search for a User</a>
+          </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav mr-auto">
@@ -86,6 +82,22 @@
         />
         <button id="searchButton">Search</button>
       </div>
+
+      <div class="filter-bar">
+        <label for="stateFilter">Select Location:</label>
+        <select id="stateFilter">
+          <option value="all">All</option>
+          <option value="NSW">NSW</option>
+          <option value="VIC">VIC</option>
+          <option value="QLD">QLD</option>
+          <option value="SA">SA</option>
+          <option value="WA">WA</option>
+          <option value="TAS">TAS</option>
+          <option value="ACT">ACT</option>
+          <option value="NT">NT</option>
+        </select>
+      </div>
+
       <div id="eventData">
         <table class="table bg-dark">
           <thead>
@@ -212,6 +224,13 @@
             alert("Please enter a search term!");
             searchEvents(searchTerm, currentAdmin);
           }
+        });
+
+      document
+        .getElementById("stateFilter")
+        .addEventListener("change", function () {
+          const selectedState = this.value;
+          fetchDataForAdmin(currentAdmin, selectedState);
         });
     </script>
   </body>
