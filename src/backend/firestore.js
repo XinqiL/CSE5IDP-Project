@@ -72,6 +72,7 @@ export async function addEventToFirestore(event) {
         eventNameKeywords: event.eventNameKeywords,
       }),
       ...(event.eventCategory && { eventCategory: event.eventCategory }),
+      ...(event.eventAddress && { eventAddress: event.eventAddress }),
       ...(event.eventLocation && { eventLocation: event.eventLocation }),
       ...(event.eventDate && { eventDate: event.eventDate }),
       ...(event.organiserName && { organiserName: event.organiserName }),
@@ -166,6 +167,10 @@ export async function fetchDataFromFirestore(currentUser) {
     categoryCell.textContent = event.eventCategory;
     row.appendChild(categoryCell);
 
+    const addressCell = document.createElement("td");
+    addressCell.textContent = event.eventAddress;
+    row.appendChild(addressCell);
+
     const locationCell = document.createElement("td");
     locationCell.textContent = event.eventLocation;
     row.appendChild(locationCell);
@@ -257,6 +262,10 @@ export async function fetchDataForAdmin(currentUser, state = "all") {
     categoryCell.textContent = event.eventCategory;
     row.appendChild(categoryCell);
 
+    const addressCell = document.createElement("td");
+    addressCell.textContent = event.eventAddress;
+    row.appendChild(addressCell);
+
     const locationCell = document.createElement("td");
     locationCell.textContent = event.eventLocation;
     row.appendChild(locationCell);
@@ -312,8 +321,11 @@ export async function fetchAnEventData(uid) {
     document.getElementById("eventName").textContent = eventData.eventName;
     document.getElementById("organiserName").textContent =
       eventData.organiserName;
-    document.getElementById("eventCategory").textContent =
-      eventData.eventCategory;
+    document.getElementById(
+      "eventCategory"
+    ).textContent = `Catogory: ${eventData.eventCategory}`;
+    document.getElementById("eventAddress").textContent =
+      eventData.eventAddress;
     document.getElementById("eventLocation").textContent =
       eventData.eventLocation;
 
@@ -357,6 +369,10 @@ export async function fetchDataForUser(currentUser, state = "all") {
     const categoryCell = document.createElement("td");
     categoryCell.textContent = event.eventCategory;
     row.appendChild(categoryCell);
+
+    const addressCell = document.createElement("td");
+    addressCell.textContent = event.eventAddress;
+    row.appendChild(addressCell);
 
     const locationCell = document.createElement("td");
     locationCell.textContent = event.eventLocation;
@@ -404,6 +420,7 @@ export async function getEventDataForEdit(uid) {
     document.getElementById("ceorganiser").value =
       eventData.organiserName || "";
     document.getElementById("cecategory").value = eventData.eventCategory || "";
+    document.getElementById("ceaddress").value = eventData.eventAddress || "";
     document.getElementById("celocation").value = eventData.eventLocation || "";
     document.getElementById("cedate").value = eventData.eventDate || "";
     document.getElementById("cewifi").value = eventData.wifi || "";
@@ -469,6 +486,10 @@ export async function searchEvents(term, currentUser) {
         const categoryCell = document.createElement("td");
         categoryCell.textContent = event.eventCategory;
         row.appendChild(categoryCell);
+
+        const addressCell = document.createElement("td");
+        addressCell.textContent = event.eventAddress;
+        row.appendChild(addressCell);
 
         const locationCell = document.createElement("td");
         locationCell.textContent = event.eventLocation;
@@ -569,6 +590,10 @@ export async function userSearchEvents(term, currentUser) {
         const categoryCell = document.createElement("td");
         categoryCell.textContent = event.eventCategory;
         row.appendChild(categoryCell);
+
+        const addressCell = document.createElement("td");
+        addressCell.textContent = event.eventAddress;
+        row.appendChild(addressCell);
 
         const locationCell = document.createElement("td");
         locationCell.textContent = event.eventLocation;
@@ -697,6 +722,10 @@ export async function fetchDataForUserEventsByUsername(username) {
         const categoryCell = document.createElement("td");
         categoryCell.textContent = event.eventCategory;
         row.appendChild(categoryCell);
+
+        const addressCell = document.createElement("td");
+        addressCell.textContent = event.eventAddress;
+        row.appendChild(addressCell);
 
         const locationCell = document.createElement("td");
         locationCell.textContent = event.eventLocation;

@@ -40,11 +40,6 @@
               >Home <span class="sr-only">(current)</span></a
             >
           </li>
-          <li class="nav-item active" id="createEventNavItem">
-            <a class="nav-link" id="createEventButton" href="create_event.html"
-              >Create Event</a
-            >
-          </li>
           <li class="nav-item">
             <a class="nav-link" href="view_eventlist.html" id="viewEventButton"
               >Events List</a
@@ -84,6 +79,7 @@
               <th>Event</th>
               <th>Organiser</th>
               <th>Category</th>
+              <th>Address</th>
               <th>Location</th>
               <th>Date</th>
               <th>Time</th>
@@ -129,18 +125,8 @@
         window.location = "home.html";
       }
 
-      function toggleCreateEventLink() {
-        let createEventNavItem = document.getElementById("createEventNavItem");
-        if (currentUser) {
-          createEventNavItem.style.display = "block"; // show if user is logged in
-        } else {
-          createEventNavItem.style.display = "none"; // hide if user is not logged in
-        }
-      }
-
       window.onload = function () {
         getUsername();
-        toggleCreateEventLink();
 
         if (currentUser == null) {
           userlink.innerText = "Create an account";
@@ -174,11 +160,6 @@
           userSearchEvents(searchTermLowercase, currentUser);
         }
       };
-      document
-        .getElementById("createEventButton")
-        .addEventListener("click", function () {
-          window.location.href = "./create_event.html";
-        });
 
       document
         .getElementById("viewEventButton")
