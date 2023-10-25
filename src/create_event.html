@@ -171,6 +171,14 @@
             pattern="^[a-zA-Z\s]{1,20}$"
             required="required"
           /><br />
+          <label for="address">Address: </label>
+          <input
+            type="text"
+            name="address"
+            id="ceaddress"
+            pattern="^[a-zA-Z0-9\s,]{1,50}$"
+            required="required"
+          /><br />
           <label for="location">Location: </label>
           <select name="location" id="celocation" required="required">
             <option value="NSW">NSW</option>
@@ -233,6 +241,7 @@
         var eventNameKeywords = eventName.toLowerCase().split(" ");
         var organiserName = document.getElementById("ceorganiser").value;
         var eventCategory = document.getElementById("cecategory").value;
+        var eventAddress = document.getElementById("ceaddress").value;
         var eventLocation = document.getElementById("celocation").value;
         var eventDate = document.getElementById("cedate").value;
         // var time = document.getElementById("cetime").value;
@@ -244,6 +253,7 @@
           eventNameKeywords: eventNameKeywords,
           organiserName: organiserName,
           eventCategory: eventCategory,
+          eventAddress: eventAddress,
           eventLocation: eventLocation,
           eventDate: eventDate,
           // time: time,
