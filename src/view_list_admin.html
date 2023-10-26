@@ -18,6 +18,11 @@
     <style>
       body {
         background-color: #90a9b0;
+
+        color: rgb(219, 175, 32);
+      }
+      .table {
+        color: rgb(219, 175, 32);
       }
     </style>
   </head>
@@ -38,7 +43,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="home.html">Home</a>
+            <a class="nav-link" href="home_admin.html">Home</a>
           </li>
           <li class="nav-item" id="createEventNavItem">
             <a class="nav-link" id="createEventButton" href="create_event.html"
@@ -46,11 +51,13 @@
             >
           </li>
           <li class="nav-item active">
-            <a class="nav-link" href="view_eventlist.html" id="viewEventButton"
+            <a class="nav-link" href="view_list_admin.html" id="viewEventButton"
               >Events List<span class="sr-only">(current)</span></a
             >
           </li>
-          <a class="nav-link" href="about.html">About Us</a>
+          <li>
+            <a class="nav-link" href="search_users.html">Search for a User</a>
+          </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav mr-auto">
@@ -75,13 +82,30 @@
         />
         <button id="searchButton">Search</button>
       </div>
+
+      <div class="filter-bar">
+        <label for="stateFilter">Select Location:</label>
+        <select id="stateFilter">
+          <option value="all">All</option>
+          <option value="NSW">NSW</option>
+          <option value="VIC">VIC</option>
+          <option value="QLD">QLD</option>
+          <option value="SA">SA</option>
+          <option value="WA">WA</option>
+          <option value="TAS">TAS</option>
+          <option value="ACT">ACT</option>
+          <option value="NT">NT</option>
+        </select>
+      </div>
+
       <div id="eventData">
-        <table class="table table">
+        <table class="table bg-dark">
           <thead>
             <tr>
               <th>Event</th>
               <th>Organiser</th>
               <th>Category</th>
+              <th>Address</th>
               <th>Location</th>
               <th>Date</th>
               <th>Time</th>
@@ -107,7 +131,9 @@
       import {
         fetchDataFromFirestore,
         searchEvents,
+        fetchDataForAdmin,
       } from "./backend/firestore.js";
+
       let adminlink = document.getElementById("adminlink");
       let signoutlink = document.getElementById("signoutlink");
       let header = document.getElementById("abc");
@@ -144,7 +170,7 @@
         toggleCreateEventLink();
 
         if (currentAdmin == null) {
-          fetchDataFromFirestore(currentAdmin);
+          fetchDataForAdmin(currentAdmin);
           adminlink.innerText = "Create an account";
           adminlink.classList.replace("nav-link", "btn");
           adminlink.classList.add("btn-primary");
@@ -155,9 +181,9 @@
           Signoutlink.classList.add("btn-success");
           Signoutlink.href = "login.html";
         } else {
-          fetchDataFromFirestore(currentAdmin);
+          fetchDataForAdmin(currentAdmin);
           adminlink.innerText = currentAdmin.adminname;
-          adminlink.innerText = "Welcome "+ currentAdmin.adminname;
+          adminlink.innerText = "Welcome Admin " + currentAdmin.adminname;
           adminlink.classList.replace("btn", "nav-link");
           adminlink.classList.add("btn-primary");
           adminlink.href = "#";
@@ -182,7 +208,7 @@
       document
         .getElementById("viewEventButton")
         .addEventListener("click", function () {
-          window.location.href = "./view_eventlist.html";
+          window.location.href = "./view_list_admin.html";
         });
 
       document
@@ -194,11 +220,18 @@
             .value.trim();
           if (searchTerm) {
             // Ensure there's something to search
-            window.location.href = `search_event.html?query=${searchTerm}`;
+            window.location.href = `search_event_admin.html?query=${searchTerm}`;
           } else {
             alert("Please enter a search term!");
             searchEvents(searchTerm, currentAdmin);
           }
+        });
+
+      document
+        .getElementById("stateFilter")
+        .addEventListener("change", function () {
+          const selectedState = this.value;
+          fetchDataForAdmin(currentAdmin, selectedState);
         });
     </script>
   </body>

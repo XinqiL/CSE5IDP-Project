@@ -7,24 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Search Users</title>
     <!-- References to external CSS files -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <style>
         body {
         
          background-color: #90a9b0;
+         color: rgb(219, 175, 32);
          .center {
          display: block;
         margin-left: auto;
         margin-right: auto;
         width: 50%;
         border-radius: 50%;
+        
+
+      }
+      .table{
+        color: rgb(219, 175, 32);
       }
        
-       
         
-        }
+      }
+    
        </style>
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             
@@ -35,12 +46,13 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                   <li class="">
-                    <a class="nav-link" href="home.html">Home</a>
+                    <a class="nav-link" href="home_admin.html">Home</a>
                   </li>
                  
                   <li class="nav-item">
-                    <a class="nav-link" href="view_eventlist.html">Events List</a>
+                    <a class="nav-link" href="view_list_admin.html">Events List</a>
                 </li>
+                <li  class="nav-item active">
                 <a class="nav-link" href="search_users.html" >Search Users<span class="sr-only">(current)</span></a>
               </li>
                   </li>
@@ -70,6 +82,9 @@
           <h3 id="abc"></h3>
          
           <h4>Search Users by their Username </h4>
+
+          <div class="col-3" >
+
           <label> Username :</label>
           <input type="text" id="userInput">
           <br>
@@ -78,11 +93,16 @@
           <br>
           <label> Email : </label>
           <input type="text" id="emailInput">
+
           
+        
+
+          </div>
           <br><br>
-          <button  id="Retbtn">Find a fullname  of a user</button>
+          <button  id="Retbtn">Find a fullname  of the user</button>
+
           
-          <button  id="Delbtn" href="home.html">Delete their account</button>
+          <button  id="Delbtn" href="home_admin.html">Delete their account</button>
           <script>
     
             let adminlink = document.getElementById('adminlink');
@@ -127,12 +147,17 @@
               }
       
               else{ 
-                adminlink.innerText = currentUser.username;
-                adminlink.innerText = "Welcome "+ currentUser.fullname;
+
+                adminlink.innerText = currentAdmin.adminname;
+                adminlink.innerText = "Welcome "+ currentAdmin.adminname;
+
+                adminlink.innerText = currentAdmin.adminname;
+                adminlink.innerText = "Welcome "+ currentAdmin.adminname;
+
                 adminlink.classList.replace("btn","nav-link");
                 adminlink.classList.add("btn-primary");
                 adminlink.href ="#";
-      
+
                 Signoutlink.innerText = "Sign Out";
                 Signoutlink.classList.replace("nav-link","btn");
                 Signoutlink.classList.add("btn-success"); 
@@ -142,7 +167,7 @@
                 Editlink.innerText = "Edit Account";
                 Editlink.classList.replace("nav-link","btn");
                 Editlink.classList.add("btn-success"); 
-                Editlink.href ="edit_account.html";
+                Editlink.href ="edit_account_admin.html";
               }
               //.Signoutlink.addEventListener("click",Signout);
             }

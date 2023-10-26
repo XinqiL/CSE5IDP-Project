@@ -12,7 +12,7 @@
   <body>
     <style>
         body {
-        
+
          background-color: #90a9b0;
          .center {
          display: block;
@@ -20,58 +20,58 @@
         margin-right: auto;
         width: 50%;
         border-radius: 50%;
-       
+
       }
         .h4{
         color :rgb(219, 175, 32)
        }
-       
-        
+
+
         }
        </style>
           <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            
+
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-            
+
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                   <li class="">
                     <a class="nav-link" href="home.html">Home</a>
                   </li>
-                 
+
                   <li class="nav-item">
-                    <a class="nav-link" href="view_eventlist.html">Events List</a>
+                    <a class="nav-link" href="view_list_admin.html">Events List</a>
                   </li>
                   <a class="nav-link" href="about.html">About Us</a>
                 </li>
-                  
+
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
                   <form class="form-inline my-2 my-lg-0">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item mx-1">
-                          <a id="userlink" class="nav-link" href="">Username</a>
+                          <a id="adminlink" class="nav-link" href="">Adminname</a>
                         </li>
                         <li class="nav-item mx-1">
                             <a id="Signoutlink" class="nav-link" href="">Signout</a>
-                           
+
                         </li>
-                        
+
                     </ul>    
-                   
+
                   </form>
-                 
+
                 </form>
               </div>
             </nav>
-      
+
           <h3 id="abc"></h3>
           <img src="c.png" alt="c" class="center">
           <h4>Update  Password Or Delete your account </h4>
           <label> Username : </label>
-          <input type="text" id="userInput">
+          <input type="text" id="adminInput">
           <br>
           <label> Email :</label>
           <input type="text" id="emailInput">
@@ -83,74 +83,74 @@
           <button  id="Updbtn">Update</button>
           <button  id="Delbtn" href="home.html">Delete</button>
           <script>
-    
-            let userlink = document.getElementById('userlink');
+
+            let admin = document.getElementById('adminlink');
             let signoutlink = document.getElementById('signoutlink');
             let header = document.getElementById("abc");
-            var currentUser = null;
-      
-            function getUsername(){
+            var currentAdmin = null;
+
+            function getAdminname(){
               let KeepLoggedIn = localStorage.getItem("KeepLoggedIn");
-      
+
               if(KeepLoggedIn == "yes"){
-                   currentUser = JSON.parse(localStorage.getItem('user'));
+                   currentAdmin = JSON.parse(localStorage.getItem('admin'));
               }
-      
+
               else{
-                   currentUser = JSON.parse(sessionStorage.getItem("user"));
+                   currentAdmin = JSON.parse(sessionStorage.getItem("admin"));
               }
             }
-      
+
             function Signout(){
-              sessionStorage.removeItem('user');
-              localStorage.removeItem('user');
+              sessionStorage.removeItem('admin');
+              localStorage.removeItem('admin');
               localStorage.removeItem('KeepLoggedIn');  
               window.location = "home.html"; 
-      
-      
+
+
             }
             window.onload = function(){
-              getUsername();
-              
-              if(currentUser == null){
-                userlink.innerText = "Create an account";
-                userlink.classList.replace("nav-link","btn");
-                userlink.classList.add("btn-primary");
-                userlink.href ="signup.html";
-      
+              getAdminname();
+
+              if(currentAdmin == null){
+                adminlink.innerText = "Create an account";
+                adminlink.classList.replace("nav-link","btn");
+                adminlink.classList.add("btn-primary");
+                adminlink.href ="signup.html";
+
                 Signoutlink.innerText = "Login";
                 Signoutlink.classList.replace("nav-link","btn");
                 Signoutlink.classList.add("btn-success");
                 Signoutlink.href ="login.html";
-              
+
               }
-      
+
               else{ 
-                userlink.innerText = currentUser.username;
-                userlink.innerText = "Welcome "+ currentUser.fullname;
-                userlink.classList.replace("btn","nav-link");
-                userlink.classList.add("btn-primary");
-                userlink.href ="#";
-      
+                adminlink.innerText = currentAdmin.adminname;
+                adminlink.innerText = "Welcome "+ currentAdmin.adminname;
+                adminlink.classList.replace("btn","nav-link");
+                adminlink.classList.add("btn-primary");
+                adminlink.href ="#";
+
                 Signoutlink.innerText = "Sign Out";
                 Signoutlink.classList.replace("nav-link","btn");
                 Signoutlink.classList.add("btn-success"); 
                 Signoutlink.href ="javascript:Signout()";
-                
-                
+
+
                 Editlink.innerText = "Edit Account";
                 Editlink.classList.replace("nav-link","btn");
                 Editlink.classList.add("btn-success"); 
-                Editlink.href ="edit_account.html";
+                Editlink.href ="edit_account_admin.html";
               }
               //.Signoutlink.addEventListener("click",Signout);
             }
-            
+
           </script>
             <script type="module">
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
-           
+
             // Your web app's Firebase configuration
             const firebaseConfig = {
               apiKey: "AIzaSyC2560pETTPekmI-ABPf_xZ3M3UB6ZqMK4",
@@ -163,7 +163,7 @@
               databaseURL:
                 "https://message-display-system-default-rtdb.asia-southeast1.firebasedatabase.app",
             };
-      
+
             // Initialize Firebase
             const app = initializeApp(firebaseConfig);
             import {
@@ -175,11 +175,11 @@
               update,
               remove
             } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
-      
-      
+
+
             const database = getDatabase(app);
 
-            var username = document.getElementById("userInput");
+            var adminname = document.getElementById("adminInput");
             var email = document.getElementById("emailInput");
             var pass = document.getElementById("passInput");
 
@@ -188,19 +188,19 @@
             var delBtn = document.getElementById("Delbtn");
 
 
-        
 
-       
+
+
 
 
 
             function RetData(){
-                
+
               const dbRef = ref(database)
 
-              get(child(dbRef, 'UsersList/' + username.value)).then((snapshot)=>{
+              get(child(dbRef, 'adminsList/' + adminname.value)).then((snapshot)=>{
                 if(snapshot.exists()){
-                  username.value = snapshot.val().username;
+                  adminname.value = snapshot.val().adminname;
                   email.value =   snapshot.val().email;
                   pass.value = snapshot.val().password;
                 }
@@ -213,11 +213,11 @@
 
               });
             }
-            
+
 
             function updateData(){
-              update(ref(database,"UsersList/"+ username.value),{
-                username: username.value,
+              update(ref(database,"adminsList/"+ adminname.value),{
+                adminname: adminname.value,
                 email: email.value,
                 password: pass.value,
               })
@@ -228,11 +228,11 @@
                 alert("Unsuccessful, error"+error);
               });
             }
-             
+
 
             function DeleteData(){
-              remove(ref(database,"UsersList/" + username.value))
-            
+              remove(ref(database,"adminsList/" + adminname.value))
+
               .then(()=>{
               alert("data deleted successfully");
             })
@@ -245,16 +245,16 @@
             delBtn.addEventListener("click",DeleteData);
 
            // AddBtn.addEventListener("click",DeleteData);
-             
-          
+
+
 
       //------------------------------------Logging  In ------------------------------------//`
           </script>
-        
-      
-             
-             
-         
+
+
+
+
+
 
 
         </body>
