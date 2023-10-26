@@ -224,58 +224,106 @@ dl dl {
   background-color: #fdbf38;
 }
 
-/* Default styles */
 .displayEvent {
   display: flex;
   flex-direction: column;
-  margin: 170px;
-  font: bold;
+  margin: 5vw;
+  font-weight: bold;
   font-family: "Courier New", Courier, monospace;
 }
 
 #eventName {
-  font-size: 64px;
-  font: bold;
+  font-size: 6vw;
+  font-weight: bold;
   color: #ffffff;
 }
 
 #eventAddress,
 #eventLocation {
-  font-size: 40px;
+  font-size: 4vw;
   color: #ececec;
 }
 
 #eventDate,
 #time {
-  font-size: 32px;
+  font-size: 3.2vw;
   color: #feaf00;
-  font: bold;
+  font-weight: bold;
 }
 
 #ecla {
-  font-size: 48px;
+  font-size: 4.8vw;
 }
 
 #organiserName {
-  font-size: 32px;
+  font-size: 3.2vw;
   color: #ececec;
 }
 
 #eventCategory {
-  font-size: 24px;
+  font-size: 2.4vw;
   color: #dadada;
 }
 
 #wifi {
-  font-size: 20px;
+  font-size: 2vw;
   color: #d7d7d7;
 }
 
 .flexRow {
   display: flex;
-  /* justify-content: space-between; */
 }
 
 .flexRow p {
-  margin: 0 10px;
+  margin: 0 1vw;
+}
+
+.flexRow p:first-child {
+  margin-left: 0;
+}
+
+.displayEvent p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+/* For larger screens */
+@media (min-width: 1024px) {
+  .displayEvent {
+    margin: 170px;
+  }
+
+  #eventName {
+    font-size: 64px;
+  }
+
+  #eventAddress,
+  #eventLocation {
+    font-size: 40px;
+  }
+
+  #eventDate,
+  #time {
+    font-size: 32px;
+  }
+
+  #ecla {
+    font-size: 48px;
+  }
+
+  #organiserName {
+    font-size: 32px;
+  }
+
+  #eventCategory {
+    font-size: 24px;
+  }
+
+  #wifi {
+    font-size: 20px;
+  }
+
+  .flexRow p {
+    margin: 0 10px;
+  }
 }
