@@ -58,7 +58,9 @@
                             <a id="Signoutlink" class="nav-link" href="">Signout</a>
                            
                         </li>
-                        
+                        <li class="nav-item mx-1">
+                          <a id ="Editlink" class="nav-link" href=""></a>
+                      </li>
                     </ul>    
                    
                   </form>
@@ -68,7 +70,7 @@
             </nav>
       
           <h3 id="abc"></h3>
-          <img src="c.png" alt="c" class="center">
+         
           <h4>Update  Password Or Delete your account </h4>
           <label> Username : </label>
           <input type="text" id="userInput">
@@ -82,8 +84,12 @@
           <button  id="Retbtn">Retrive</button>
           <button  id="Updbtn">Update</button>
           <button  id="Delbtn" href="home.html">Delete</button>
+
+           <!---------------------js for firbase------------------->
           <script>
-    
+       
+
+            // take inputs 
             let userlink = document.getElementById('userlink');
             let signoutlink = document.getElementById('signoutlink');
             let header = document.getElementById("abc");

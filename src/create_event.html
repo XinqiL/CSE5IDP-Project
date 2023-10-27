@@ -63,6 +63,9 @@
             <li class="nav-item mx-1">
               <a id="Signoutlink" class="nav-link" href="">Signout</a>
             </li>
+            <li class="nav-item mx-1">
+              <a id ="Editlink" class="nav-link" href=""></a>
+          </li>
           </ul>
         </form>
       </div>
@@ -116,6 +119,10 @@
           Signoutlink.classList.add("btn-success");
           Signoutlink.href = "javascript:Signout()";
         }
+          Editlink.innerText = "Edit Account";
+          Editlink.classList.replace("nav-link","btn");
+          Editlink.classList.add("btn-success"); 
+          Editlink.href ="edit_account_admin.html";
         //.Signoutlink.addEventListener("click",Signout);
       };
     </script>
