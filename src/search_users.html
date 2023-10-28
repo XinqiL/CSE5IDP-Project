@@ -70,6 +70,9 @@
                             <a id="Signoutlink" class="nav-link" href="">Signout</a>
                            
                         </li>
+                        <li class="nav-item mx-1">
+                          <a id ="Editlink" class="nav-link" href=""></a>
+                      </li>
                         
                     </ul>    
                    
@@ -83,7 +86,7 @@
          
           <h4>Search Users by their Username </h4>
 
-          <div class="col-3" >
+          <div class="col-2" >
 
           <label> Username :</label>
           <input type="text" id="userInput">
@@ -103,6 +106,8 @@
 
           
           <button  id="Delbtn" href="home_admin.html">Delete their account</button>
+
+           <!---------------------js for firbase------------------->
           <script>
     
             let adminlink = document.getElementById('adminlink');
@@ -202,7 +207,7 @@
               remove
             } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-database.js";
       
-      
+            // inputs in js
             const database = getDatabase(app);
 
             var username = document.getElementById("userInput");
