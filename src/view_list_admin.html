@@ -56,8 +56,11 @@
             >
           </li>
           <li>
-            <a class="nav-link" href="search_users.html">Search for a User</a>
+            <a class="nav-link" href="search_users.html">Search Users</a>
           </li>
+                  </li>
+                  <a class="nav-link" href="about_a.html">About Us</a>
+                </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
           <ul class="navbar-nav mr-auto">
@@ -68,8 +71,8 @@
               <a id="Signoutlink" class="nav-link" href="">Signout</a>
             </li>
             <li class="nav-item mx-1">
-              <a id ="Editlink" class="nav-link" href=""></a>
-          </li>
+              <a id="Editlink" class="nav-link" href=""></a>
+            </li>
           </ul>
         </form>
       </div>
@@ -199,9 +202,9 @@
             Signout();
           });
           Editlink.innerText = "Edit Account";
-          Editlink.classList.replace("nav-link","btn");
-          Editlink.classList.add("btn-success"); 
-          Editlink.href ="edit_account_admin.html";
+          Editlink.classList.replace("nav-link", "btn");
+          Editlink.classList.add("btn-success");
+          Editlink.href = "edit_account_admin.html";
         }
         //.Signoutlink.addEventListener("click",Signout);
       };
