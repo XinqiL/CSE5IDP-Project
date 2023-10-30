@@ -31,21 +31,19 @@
         height: 100vh;
         width: 100vw;
         margin: 0px;
-        color :rgb(219, 175, 32)
+        color: rgb(219, 175, 32);
       }
-      .red
-{
-     margin-top: 5px;
-     color: red;
-     font-weight: bold;
-}
-    
-.green
-{
-     margin-top: 5px;
-     color: green;
-     font-weight: bold;
-}
+      .red {
+        margin-top: 5px;
+        color: red;
+        font-weight: bold;
+      }
+
+      .green {
+        margin-top: 5px;
+        color: green;
+        font-weight: bold;
+      }
     </style>
     <!-------------- end of CSS------------------------------------>
   </head>
@@ -78,8 +76,9 @@
         placeholder="Enter Password"
         id="passInput"
         class="form-control mb-2"
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,}$" required>
-      
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,}$"
+        required
+      />
 
       <input
         type="password"
@@ -90,7 +89,7 @@
         onkeyup="myFunction1()"
       />
       <i class="bi bi-eye-slash" id="toggleconfirmPassword"></i>
-      <br>
+      <br />
       <input type="checkbox" onclick="myFunction()" />Show Password
 
       <button type="submit" id="sub_btn" class="btn w-100 btn-primary mb-2">
@@ -104,9 +103,8 @@
         >Home</a
       >
       <a href="admin.html" class="badge badge-secondary py-1 w-100"
-        >Sign in as admin </a
-      >
-     
+        >Sign in as admin
+      </a>
     </div>
 
     <!---------------- js for showing the password ------------------->
@@ -122,21 +120,26 @@
           y.type = "password";
         }
       }
-      function myFunction1(){
-        var password = document.querySelector('input[name=validationpassword]').value;
-        var confirm = document.querySelector('input[name=validationconfirmpassword]').value;
-  
-        var matchedOrNot = (confirm == password) ? "Passwords matched" : "Passwords did not matched"; 
+      function myFunction1() {
+        var password = document.querySelector(
+          "input[name=validationpassword]"
+        ).value;
+        var confirm = document.querySelector(
+          "input[name=validationconfirmpassword]"
+        ).value;
 
-        var color = (matchedOrNot == "Passwords matched") ? "green" : "red";
+        var matchedOrNot =
+          confirm == password
+            ? "Passwords matched"
+            : "Passwords did not matched";
+
+        var color = matchedOrNot == "Passwords matched" ? "green" : "red";
 
         document.getElementById("toggleconfirmPassword").className = color;
 
-        document.getElementById("toggleconfirmPassword").innerHTML = matchedOrNot;
-
-      } 
-     
-
+        document.getElementById("toggleconfirmPassword").innerHTML =
+          matchedOrNot;
+      }
     </script>
 
     <!---------------------js for firbase------------------->
@@ -175,22 +178,22 @@
       const username = document.getElementById("userInput");
       const pass = document.getElementById("passInput");
       const cpass = document.getElementById("cpassInput");
-      
+
       const submit = document.getElementById("sub_btn");
-     
+
       //----------------Validate the input-----------------//
-      function isEmptyOrSpaces(str){
-            return str === null || str.match(/^ *$/) !== null; 
-      
-      } 
+      function isEmptyOrSpaces(str) {
+        return str === null || str.match(/^ *$/) !== null;
+      }
 
       function Validation() {
         var fullnameregex = /^[a-zA-Z\s]+$/;
-        var emailregex = /^[a-zA-Z0-9].+@[a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9]+$/;
+        var emailregex =
+          /^[a-zA-Z0-9].+@[a-zA-Z0-9]+.[a-zA-Z0-9]+.[a-zA-Z0-9]+$/;
         var userregex = /^[a-zA-Z0-9]+$/;
         var passregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         var cpassregex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-      
+
         if (!fullnameregex.test(fullname.value)) {
           alert("please enter a valid name");
           return false;
@@ -203,21 +206,23 @@
           alert("please enter a valid username");
           return false;
         }
-        if( isEmptyOrSpaces(pass.value)){
-            alert("password must not be  empty");
-            return false;
-            }
-        if( isEmptyOrSpaces(cpass.value)){
-            alert("password must not be  empty");
-            return false;
-            }    
-        if (!passregex.test(pass.value)) {
-            alert("Password must be more than 8 characters including uppercase, lowercase and special characters.");
-            return false;
+        if (isEmptyOrSpaces(pass.value)) {
+          alert("password must not be  empty");
+          return false;
         }
-        if (pass.value != cpass.value ){
-            alert ("Passwords did not match! Please try again!");
-            return false; 
+        if (isEmptyOrSpaces(cpass.value)) {
+          alert("password must not be  empty");
+          return false;
+        }
+        if (!passregex.test(pass.value)) {
+          alert(
+            "Password must be more than 8 characters including uppercase, lowercase and special characters."
+          );
+          return false;
+        }
+        if (pass.value != cpass.value) {
+          alert("Passwords did not match! Please try again!");
+          return false;
         }
         return true;
       }
@@ -242,6 +247,7 @@
             })
               .then(() => {
                 alert("user added successfully");
+                window.location.href = "login.html";
               })
               .catch((error) => {
                 alert("error" + error);
